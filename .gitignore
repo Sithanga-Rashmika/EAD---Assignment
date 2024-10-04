@@ -1,0 +1,55 @@
+# ASP.NET Core
+bin/
+obj/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.vspscc
+*.vssscc
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Environment variables
+.env
+
+# Visual Studio
+.vscode/
+.vs/
+*.csproj.user
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+**/*.csproj.nuget.dgspec.json
+**/*.csproj.nuget.cache
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# npm package dependencies
+package-lock.json
+yarn.lock
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# macOS files
+.DS_Store
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config files
+Desktop.ini
