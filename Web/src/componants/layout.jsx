@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <div
-        class="page-wrapper"
+        className="page-wrapper"
         id="main-wrapper"
         data-layout="vertical"
         data-navbarbg="skin6"
@@ -16,10 +16,10 @@ const Layout = () => {
         data-header-position="fixed"
       >
         <Sidebar />
-        <div class="body-wrapper">
+        <div className="body-wrapper">
           <Navbar />
 
-          <div class="container-fluid">
+          <div className="container-fluid">
             <Outlet />
           </div>
         </div>
