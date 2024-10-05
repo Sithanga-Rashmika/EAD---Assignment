@@ -7,12 +7,10 @@ using System.IO;
 public class ProductController : ControllerBase
 {
     private readonly ProductRepository _productRepository;
-    private readonly OrderRepository _orderRepository;
 
-    public ProductController(ProductRepository productRepository, OrderRepository orderRepository)
+    public ProductController(ProductRepository productRepository)
     {
         _productRepository = productRepository;
-        _orderRepository = orderRepository;
     }
 
     // GET: api/Product
@@ -116,33 +114,4 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
-    [HttpPost("add-to-cart")]
-    public IActionResult AddToCart([FromBody] Cart request)
-    {
-        var order = new Order
-        {
-            CustomerID = request.CustomerID,
-            ProductID = request.ProductID,
-            Quantity = request.Quantity,
-            Status = "Purchased",  // Marked as purchased
-            PurchaseDate = DateTime.Now,
-            VendorID = request.VendorID
-        };
-        _orderRepository.AddOrder(order);
-        return Ok("Product added to cart and marked as purchased.");
-    }
-
-    // Mark order as delivered (CSR, Admin, or Vendor)
-    [HttpPost("mark-delivered")]
-    public IActionResult MarkAsDelivered([FromQuery] string orderId)
-    {
-        var order = _orderRepository.GetOrderById(orderId);
-        if (order == null)
-            return NotFound("Order not found");
-
-        order.Status = "Delivered";
-        order.DeliveryDate = DateTime.Now;
-        _orderRepository.UpdateOrder(order);
-        return Ok("Order marked as delivered.");
-    }
 }
