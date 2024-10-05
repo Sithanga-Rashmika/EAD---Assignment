@@ -9,6 +9,7 @@ builder.Services.Configure<MongoDbSettings>(options =>
 builder.Services.AddRazorPages();               // Razor Pages, if you are also serving HTML views
 builder.Services.AddControllers();              // API Controllers
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ProductRepository>();
 // builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("ConnectionStrings"));  // Register UserRepository as scoped
 builder.Services.AddSingleton<MongoDbContext>(); // Make sure MongoDbContext is registered
 
