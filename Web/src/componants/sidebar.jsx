@@ -6,7 +6,7 @@ const Sidebar = () => {
       <aside class="left-sidebar">
         <div>
           <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="./index.html" class="text-nowrap logo-img">
+            <a href="/" class="text-nowrap logo-img">
               <img src="../assets/images/logos/logo1.png" width="180" alt="" />
             </a>
             <div
@@ -25,7 +25,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./index.html"
+                  href="/"
                   aria-expanded="false"
                 >
                   <span>
@@ -41,7 +41,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./ui-buttons.html"
+                  href="/products"
                   aria-expanded="false"
                 >
                   <span>
@@ -53,11 +53,11 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./ui-alerts.html"
+                  href="/categories"
                   aria-expanded="false"
                 >
                   <span>
-                    <i class="ti ti-layers"></i>
+                    <i class="ti ti-tags"></i>
                   </span>
                   <span class="hide-menu">Manage Categories</span>
                 </a>
@@ -71,7 +71,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./ui-card.html"
+                  href="/inventory"
                   aria-expanded="false"
                 >
                   <span>
@@ -89,7 +89,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./ui-forms.html"
+                  href="/orders"
                   aria-expanded="false"
                 >
                   <span>
@@ -101,7 +101,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./ui-typography.html"
+                  href="/cancel"
                   aria-expanded="false"
                 >
                   <span>
@@ -118,7 +118,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./authentication-login.html"
+                  href="/vendor"
                   aria-expanded="false"
                 >
                   <span>
@@ -136,7 +136,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./authentication-register.html"
+                  href="/active"
                   aria-expanded="false"
                 >
                   <span>
@@ -148,7 +148,7 @@ const Sidebar = () => {
               <li class="sidebar-item">
                 <a
                   class="sidebar-link"
-                  href="./authentication-register.html"
+                  href="/reactive"
                   aria-expanded="false"
                 >
                   <span>
