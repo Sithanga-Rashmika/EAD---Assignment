@@ -18,7 +18,7 @@ public class ProductRepository
     {
         _context.Products.InsertOne(product);
     }
-      public void UpdateProduct(Product updatedProduct)
+    public void UpdateProduct(Product updatedProduct)
     {
         var existingProduct = GetProductByID(updatedProduct.ProductID);
         if (existingProduct == null)
@@ -34,17 +34,25 @@ public class ProductRepository
             .Set(p => p.Price, updatedProduct.Price)
             .Set(p => p.StockQuantity, updatedProduct.StockQuantity)
             .Set(p => p.ImageUrl, updatedProduct.ImageUrl);
-            // Add other fields to update as necessary
+        // Add other fields to update as necessary
 
         _context.Products.UpdateOne(p => p.ProductID == updatedProduct.ProductID, update);
     }
     public IEnumerable<Product> GetAllProducts()
     {
-        return _context.Products.Find(_ => true).ToList(); 
+        return _context.Products.Find(_ => true).ToList();
     }
 
     public void DeleteProduct(string id)
     {
         _context.Products.DeleteOne(p => p.ProductID == id);
+    }
+
+    public IEnumerable<Product> BrowseProducts(string category, string searchTerm)
+    {
+        // Search by category or product name
+        return _context.Products
+                       .Find(p => p.Category == category || p.Name.Contains(searchTerm))
+                       .ToList();
     }
 }
