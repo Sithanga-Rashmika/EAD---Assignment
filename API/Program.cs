@@ -10,12 +10,22 @@ builder.Services.AddRazorPages();               // Razor Pages, if you are also 
 builder.Services.AddControllers();              // API Controllers
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ProductRepository>();
-builder.Services.AddScoped<VendorRepository>();
+builder.Services.AddScoped<ARoleRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<VendorRatingRepository>();
 // builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("ConnectionStrings"));  // Register UserRepository as scoped
 builder.Services.AddSingleton<MongoDbContext>(); // Make sure MongoDbContext is registered
 
+// Configure CORS to allow requests from any origin (can be restricted later)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -38,5 +48,8 @@ app.MapRazorPages();
 
 // Map API Controllers (for Web API)
 app.MapControllers();
+
+// Enable CORS in the middleware pipeline
+app.UseCors("AllowAll");
 
 app.Run();

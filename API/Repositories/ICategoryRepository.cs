@@ -2,7 +2,7 @@ public interface ICategoryRepository
 {
     IEnumerable<Category> GetAllVendors();
     
-    Vendor GetCategoryByID(string id);
+    Category GetCategoryByID(string id);
 
     void AddCategory(Product product);
 

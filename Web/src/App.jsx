@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import'./assets/custom.css'
+import { Toaster } from "react-hot-toast";
+
 
 import Layout from "./componants/layout";
 import Login from "./scenes/Login";
@@ -20,6 +22,7 @@ import Reactive from './scenes/Reactive';
 function App() {
   return (
     <>
+    <Toaster position="top-center" reverseOrder={true} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
