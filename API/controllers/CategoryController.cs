@@ -44,7 +44,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateVendor(string id, [FromBody] Category category)
+    public IActionResult UpdateCategory(string id, [FromBody] Category category)
     {
         var exCategory = _categoryRepository.GetCategoryByID(id);
         if (exCategory == null)
@@ -58,7 +58,7 @@ public class CategoryController : ControllerBase
 
     // DELETE: api/Product/{id}
     [HttpDelete("{id}")]
-    public IActionResult DeleteVendor(string id)
+    public IActionResult DeleteCategory(string id)
     {
         var category = _categoryRepository.GetCategoryByID(id);
         if (category == null)
@@ -69,4 +69,24 @@ public class CategoryController : ControllerBase
         _categoryRepository.DeleteCategory(id);
         return NoContent(); // Return 204 No Content on successful deletion
     }
+
+    public class UpdateCategoryStatusRequest
+    {
+        public string CategoryId { get; set; }
+        public bool Val { get; set; }
+    }
+
+
+    [HttpPut("update-status")]
+    public IActionResult UpdateCategoryStatus([FromBody] UpdateCategoryStatusRequest request)
+    {
+        if (string.IsNullOrEmpty(request.CategoryId))
+        {
+            return BadRequest(new { message = "Category ID is missing or invalid" });
+        }
+
+        _categoryRepository.UpdateCategoryStatus(request.CategoryId, request.Val);
+        return NoContent(); // Return 204 No Content on successful update
+    }
+
 }

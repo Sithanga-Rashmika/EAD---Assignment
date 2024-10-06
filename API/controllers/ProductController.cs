@@ -54,7 +54,7 @@ public class ProductController : ControllerBase
         product.ImageUrl = $"/images/{fileName}";
 
         _productRepository.AddProduct(product);
-        return Ok("Product added successfully");
+        return Ok(product);
     }
 
    // PUT: api/Product/{id}

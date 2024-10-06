@@ -4,9 +4,11 @@ public interface ICategoryRepository
     
     Category GetCategoryByID(string id);
 
-    void AddCategory(Product product);
+    void AddCategory(Category category);
 
-    void UpdateCategory(Product product);
+    void UpdateCategory(Category category);
+    
+    void UpdateCategoryStatus(string id,bool val);
 
     string DeleteCategory(string id);
 }

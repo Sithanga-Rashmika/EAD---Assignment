@@ -13,6 +13,7 @@ builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ARoleRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<VendorRatingRepository>();
+builder.Services.AddScoped<MyOrderRepository>();
 // builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("ConnectionStrings"));  // Register UserRepository as scoped
 builder.Services.AddSingleton<MongoDbContext>(); // Make sure MongoDbContext is registered
 

@@ -20,6 +20,6 @@ public class MongoDbContext
     public IMongoCollection<Product> Products => _database.GetCollection<Product>("products");
     public IMongoCollection<ARole> Aroles => _database.GetCollection<ARole>("aroles");
     public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
-
     public IMongoCollection<VendorRating> VendorRatings => _database.GetCollection<VendorRating>("VendorRatings");
+    public IMongoCollection<MyOrder> Myorders => _database.GetCollection<MyOrder>("myorders");
 }

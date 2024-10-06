@@ -44,4 +44,17 @@ public class CategoryRepository
         _context.Categories.DeleteOne(c => c.CategoryID == id);
     }
 
+    public void UpdateCategoryStatus(string id, bool val)
+    {
+        var exCategory = GetCategoryByID(id);
+        if (exCategory == null)
+        {
+            throw new Exception("Category not found.");
+        }
+        
+        exCategory.CategoryStatus = val;
+        _context.Categories.ReplaceOne(c => c.CategoryID == id, exCategory);
+    }
+
+
 }
