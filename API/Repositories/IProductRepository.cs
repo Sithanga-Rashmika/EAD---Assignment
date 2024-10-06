@@ -9,4 +9,7 @@ public interface IProductRepository
     void UpdateProduct(Product product);
 
     string DeleteProduct(string id);
+
+    string GetProductByVendorID(string id);
+    string GetVendorProductByID(string id);
 }

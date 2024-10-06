@@ -33,7 +33,7 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
-   [HttpPost("add")]
+    [HttpPost("add")]
     public IActionResult AddProduct([FromForm] Product product, [FromForm] IFormFile imageFile)
     {
         if (imageFile == null || imageFile.Length == 0)
@@ -57,7 +57,7 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
-   // PUT: api/Product/{id}
+    // PUT: api/Product/{id}
     [HttpPut("{id}")]
     public IActionResult UpdateProduct(string id, [FromForm] Product product, [FromForm] IFormFile imageFile)
     {
@@ -92,7 +92,7 @@ public class ProductController : ControllerBase
         _productRepository.UpdateProduct(product);
         return NoContent(); // Return 204 No Content on successful update
     }
-    
+
     // DELETE: api/Product/{id}
     [HttpDelete("{id}")]
     public IActionResult DeleteProduct(string id)
@@ -112,6 +112,29 @@ public class ProductController : ControllerBase
     {
         var products = _productRepository.BrowseProducts(category, searchTerm);
         return Ok(products);
+    }
+
+       // GET: api/Product/{id} 
+    [HttpGet("vendor/{id}")]
+    public ActionResult<Product> GetProductByVendorID(string id)
+    {
+        var product = _productRepository.GetProductByVendorID(id);
+        if (product == null)
+        {
+            return NotFound(); // Return 404 if product not found
+        }
+        return Ok(product);
+    }
+
+    [HttpGet("vendor/all/{id}")]
+    public ActionResult<Product> GetVendorProductByID(string id)
+    {
+        var product = _productRepository.GetVendorProductByID(id);
+        if (product == null)
+        {
+            return NotFound(); // Return 404 if product not found
+        }
+        return Ok(product);
     }
 
 }

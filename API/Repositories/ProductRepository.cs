@@ -55,4 +55,19 @@ public class ProductRepository
                        .Find(p => p.Category == category || p.Name.Contains(searchTerm))
                        .ToList();
     }
+
+    public IEnumerable<Product> GetProductByVendorID(string id)
+    {
+        var filter = Builders<Product>.Filter.And(
+        Builders<Product>.Filter.Eq(p => p.VendorID, id),
+        Builders<Product>.Filter.Lt(p => p.StockQuantity, 20));
+        return _context.Products.Find(filter).ToList();
+    }
+
+    public IEnumerable<Product> GetVendorProductByID(string id)
+    {
+        var filter = Builders<Product>.Filter.And(
+        Builders<Product>.Filter.Eq(p => p.VendorID, id));
+        return _context.Products.Find(filter).ToList();
+    }
 }
