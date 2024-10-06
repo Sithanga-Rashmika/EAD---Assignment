@@ -22,6 +22,7 @@ public class UserController : ControllerBase
         }
 
         user.IsActive = false; // Account needs activation by CSR
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _userRepository.AddUser(user);
         return Ok("User registered successfully. Awaiting CSR activation.");
     }
@@ -42,7 +43,7 @@ public class UserController : ControllerBase
     }
 
     // Modify user account details (e.g., change email or password)
-    [HttpPut("modify")]
+    [HttpPatch("modify")]
     public IActionResult ModifyUser([FromBody] User modifiedUser)
     {
         var existingUser = _userRepository.GetUserByEmail(modifiedUser.Email);
@@ -56,7 +57,22 @@ public class UserController : ControllerBase
             return BadRequest("Account is inactive. Please contact CSR to activate it.");
         }
 
-        existingUser.Password = modifiedUser.Password;
+        // Update only fields that are provided (not null or default)
+        if (!string.IsNullOrEmpty(modifiedUser.Password))
+        {
+            modifiedUser.Password = BCrypt.Net.BCrypt.HashPassword(modifiedUser.Password);
+        }
+        existingUser.Password = modifiedUser.Password ?? existingUser.Password;
+        existingUser.Contact = modifiedUser.Contact ?? existingUser.Contact;
+        existingUser.Address = modifiedUser.Address ?? existingUser.Address;
+        existingUser.Gender = modifiedUser.Gender ?? existingUser.Gender;
+
+        // Check if isDeactivatedByCSR field was provided, else retain the existing value
+        if (modifiedUser.IsDeactivatedByCSR != default(bool) || modifiedUser.IsDeactivatedByCSR == false)
+        {
+            existingUser.IsDeactivatedByCSR = modifiedUser.IsDeactivatedByCSR;
+        }
+
         _userRepository.UpdateUser(existingUser);
         return Ok("User details updated successfully.");
     }
@@ -96,5 +112,40 @@ public class UserController : ControllerBase
         user.IsDeactivatedByCSR = false;
         _userRepository.UpdateUser(user);
         return Ok("User reactivated successfully.");
+    }
+
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] Dictionary<string, string> loginData)
+    {
+        // Check if the email exists in the database
+
+        if (!loginData.TryGetValue("email", out string email) ||
+            !loginData.TryGetValue("password", out string password))
+        {
+            return BadRequest(new { message = "Email or password is missing" });
+        }
+        var existingUser = _userRepository.GetUserByEmail(email);
+        Console.WriteLine("ccc");
+        if (existingUser == null)
+        {
+            return NotFound("User does not exist.");
+        }
+
+        // Verify if the account is active
+        if (!existingUser.IsActive)
+        {
+            return BadRequest("Account is inactive. Please contact CSR to activate it.");
+        }
+
+        // Verify the password using BCrypt
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, existingUser.Password);
+        if (!isPasswordValid)
+        {
+            return Unauthorized("Invalid password.");
+        }
+
+        // Login successful, return a success message or a token (e.g., JWT)
+        return Ok("Login successful.");
+
     }
 }
