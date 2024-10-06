@@ -93,11 +93,11 @@ const Inventory = () => {
                         </a>
                       </div>
                       <div className="card-body pt-3 p-4">
-                        <h4 style={{fontWeight:"700"}}>{data.category}</h4>
-                        <h6 className="mb-0">
+                        <h3 style={{fontWeight:"700"}}>{data.category}</h3>
+                        <h6 className="fw-semibold fs-4 mb-0">
                           Product Count - {data.count}
                         </h6>
-                        <h6 className="mb-0">
+                        <h6 className="fw-semibold fs-4 mb-0">
                           Total Quantity - {data.totalQuantity}
                         </h6>
                       </div>

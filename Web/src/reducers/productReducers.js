@@ -3,6 +3,7 @@ import { productConstants } from "../actions/constants";
 const initState = {
   products: [],
   catProducts: [],
+  notifications: [],
   loading: false,
 };
 
@@ -114,6 +115,25 @@ export default (state = initState, action) => {
       };
       break;
     case productConstants.TOPUP_PRODUCT_FALIURE:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+    case productConstants.NOTIFICATION_PRODUCT_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case productConstants.NOTIFICATION_PRODUCT_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        notifications: action.payload,
+      };
+      break;
+    case productConstants.NOTIFICATION_PRODUCT_FALIURE:
       state = {
         ...state,
         loading: false,
