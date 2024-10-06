@@ -77,24 +77,31 @@ public class ARoleController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult AROleLogin([FromBody] ARole loginRequest)
+public IActionResult AROleLogin([FromBody] Dictionary<string, string> loginData)
+{
+    // Retrieve the email and password from the dictionary
+    if (!loginData.TryGetValue("ARoleEmail", out string ARoleEmail) || 
+        !loginData.TryGetValue("ARolePasswrod", out string ARolePasswrod))
     {
-        // Retrieve the vendor by email
-        var aRole = _arolerepository.GetARoleByEmail(loginRequest.ARoleEmail);
-
-        if (aRole == null)
-        {
-            return Unauthorized(new { message = "Invalid email or password" });
-        }
-
-        // Verify the entered password with the stored hashed password
-        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginRequest.ARolePasswrod, aRole.ARolePasswrod);
-
-        if (!isPasswordValid)
-        {
-            return Unauthorized(new { message = "Invalid email or password" });
-        }
-
-        return Ok(aRole);
+        return BadRequest(new { message = "Email or password is missing" });
     }
+
+    // Retrieve the vendor by email
+    var aRole = _arolerepository.GetARoleByEmail(ARoleEmail);
+
+    if (aRole == null)
+    {
+        return Unauthorized(new { message = "Invalid email or password" });
+    }
+
+    // Verify the entered password with the stored hashed password
+    bool isPasswordValid = BCrypt.Net.BCrypt.Verify(ARolePasswrod, aRole.ARolePasswrod);
+
+    if (!isPasswordValid)
+    {
+        return Unauthorized(new { message = "Invalid email or password" });
+    }
+
+    return Ok(aRole);
+}
 }

@@ -36,6 +36,8 @@ public class ARoleRepository
         exarole.ARoleEmail = aRole.ARoleEmail;
         exarole.ARolePasswrod = aRole.ARolePasswrod;
         exarole.ARoleTyoe = aRole.ARoleTyoe;
+        exarole.ARName = aRole.ARName;
+        exarole.ARNumber = aRole.ARNumber;
 
         // Replace the vendor while keeping the _id intact
         _context.Aroles.ReplaceOne(a => a.ARoleID == aRole.ARoleID, exarole);

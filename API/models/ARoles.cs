@@ -12,6 +12,12 @@ public class ARole
     [BsonElement("ar_email")]
     public string ARoleEmail { get; set; }
 
+    [BsonElement("ar_name")]
+    public string ARName { get; set; }
+
+    [BsonElement("ar_number")]
+    public string ARNumber { get; set; }
+
     [BsonElement("ar_password")]
     public string ARolePasswrod { get; set; }
 
