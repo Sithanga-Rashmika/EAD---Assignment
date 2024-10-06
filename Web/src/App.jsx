@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import'./assets/custom.css'
 
 import Layout from "./componants/layout";
 import Login from "./scenes/Login";

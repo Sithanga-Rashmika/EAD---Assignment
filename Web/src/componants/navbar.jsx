@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <>
       <header className="app-header">
-        <nav className="navbar navbar-expand-lg navbar-light">
+        <nav className="navbar navbar-expand-lg navbar-light"  >
           <ul className="navbar-nav">
             <li className="nav-item d-block d-xl-none">
               <a
