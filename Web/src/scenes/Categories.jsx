@@ -14,11 +14,33 @@ import {
   MDBModalFooter,
 } from "mdb-react-ui-kit";
 import { TextField, MenuItem, InputBase, IconButton } from "@mui/material";
+import toast from "react-hot-toast";
+import { createCategory, retriveCategory } from "../actions/categoryAction";
+import { useSelector, useDispatch } from "react-redux";
 
 const Categories = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.category.loading);
+  const categories = useSelector((state) => state.category.categories);
+  const [category, setCategory] = useState("");
+
   useEffect(() => {
     document.title = "Categories | BizCart";
   }, []);
+
+  useEffect(() => {
+    if (loading === true) {
+      toast.loading("Loading...", {
+        id: "loading",
+      });
+    } else if (loading === false) {
+      toast.dismiss("loading");
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    dispatch(retriveCategory());
+  }, [dispatch]);
 
   //add modal functions
   const [shmodal, setShmodal] = useState(false);
@@ -29,10 +51,26 @@ const Categories = () => {
 
   const closeModal = () => {
     setShmodal(false);
+    setCategory("");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (category === "") {
+      toast.error("Category required..!", { id: 1 });
+    } else if (category != "") {
+      const prefix = "CID";
+      const suffix = Math.floor(100000 + Math.random() * 900000);
+      const CID = prefix + "_" + suffix;
+      const form = {
+        CategoryID: CID,
+        CategoryName: category,
+        CategoryStatus: true,
+      };
+      dispatch(createCategory(form));
+      closeModal();
+    }
   };
 
   const AddCategoryModal = () => {
@@ -58,6 +96,8 @@ const Categories = () => {
                         label="Enter Category"
                         variant="outlined"
                         fullWidth
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
                       />
                     </div>
                   </form>
@@ -109,104 +149,50 @@ const Categories = () => {
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">CID</th>
-                    <th scope="col">Name</th>
                     <th scope="col">Category</th>
+                    <th scope="col">Status</th>
                     <th scope="col" style={{ textAlign: "center" }}>
                       Actions
                     </th>
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>PID1234</td>
-                    <td>VID5678</td>
-                    <td>Product 1</td>
-                    <td
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Tooltip title="Upgrade Lecture">
-                        <SettingsApplicationsRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                            marginRight: "15px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete Video">
-                        <DeleteForeverRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>PID2234</td>
-                    <td>VID6678</td>
-                    <td>Product 2</td>
-                    <td
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Tooltip title="Upgrade Lecture">
-                        <SettingsApplicationsRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                            marginRight: "15px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete Video">
-                        <DeleteForeverRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>PID3234</td>
-                    <td>VID7678</td>
-                    <td>Product 3</td>
-                    <td
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Tooltip title="Upgrade Lecture">
-                        <SettingsApplicationsRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                            marginRight: "15px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete Video">
-                        <DeleteForeverRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
+                  {categories.map((data, index) => (
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.categoryID}</td>
+                      <td>{data.categoryName}</td>
+                      <td
+                        style={{ color: data.categoryStatus ? "green" : "red" }}
+                      >
+                        {data.categoryStatus ? "Active" : "Deactivated"}
+                      </td>
+                      <td
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Tooltip title="Upgrade Lecture">
+                          <SettingsApplicationsRoundedIcon
+                            style={{
+                              cursor: "pointer",
+                              marginRight: "15px",
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title="Delete Video">
+                          <DeleteForeverRoundedIcon
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Tooltip>
+                      </td>
+                    </tr>
+                  ))}
                 </MDBTableBody>
               </MDBTable>
             </div>

@@ -1,45 +1,45 @@
-import { categoryConstants } from "../actions/constants";
+import { productConstants } from "../actions/constants";
 
 const initState = {
-  categories: [],
+  products: [],
   loading: false,
 };
 
 export default (state = initState, action) => {
   switch (action.type) {
-    case categoryConstants.CREATE_CATEGORY_REQUEST:
+    case productConstants.CREATE_CATEGORY_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.CREATE_CATEGORY_SUCCESS:
+    case productConstants.CREATE_CATEGORY_SUCCESS:
       state = {
         ...state,
         loading: false,
         categories: [...state.categories, action.payload]
       };
       break;
-    case categoryConstants.CREATE_CATEGORY_FALIURE:
+    case productConstants.CREATE_CATEGORY_FALIURE:
       state = {
         ...state,
         loading: false,
       };
       break;
-    case categoryConstants.FETCH_CATEGORY_REQUEST:
+    case productConstants.FETCH_CATEGORY_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.FETCH_CATEGORY_SUCCESS:
+    case productConstants.FETCH_CATEGORY_SUCCESS:
       state = {
         ...state,
         loading: false,
         categories: action.payload,
       };
       break;
-    case categoryConstants.FETCH_CATEGORY_FALIURE:
+    case productConstants.FETCH_CATEGORY_FALIURE:
       state = {
         ...state,
         loading: false,
