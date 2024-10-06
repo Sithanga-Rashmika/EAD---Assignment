@@ -10,4 +10,5 @@ public interface IARoleReporsitory
 
     string DeleteARole(string id);
     ARole GetARoleByEmail(string email);
+    ARole GetARoleByRole(string role);
 }

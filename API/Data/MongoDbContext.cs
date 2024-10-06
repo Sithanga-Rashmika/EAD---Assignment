@@ -22,4 +22,6 @@ public class MongoDbContext
     public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
     public IMongoCollection<VendorRating> VendorRatings => _database.GetCollection<VendorRating>("VendorRatings");
     public IMongoCollection<MyOrder> Myorders => _database.GetCollection<MyOrder>("myorders");
+    public IMongoCollection<Cart> Carts => _database.GetCollection<Cart>("Cart");
+
 }

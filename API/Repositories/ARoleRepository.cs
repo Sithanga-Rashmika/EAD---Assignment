@@ -53,4 +53,9 @@ public class ARoleRepository
     {
         return _context.Aroles.Find(a => a.ARoleEmail == email).FirstOrDefault();
     }
+
+    public ARole GetARoleByRole(string role)
+    {
+        return _context.Aroles.Find(a => a.ARoleTyoe == role).FirstOrDefault();
+    }
 }
