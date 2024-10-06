@@ -12,4 +12,6 @@ public interface IProductRepository
 
     string GetProductByVendorID(string id);
     string GetVendorProductByID(string id);
+    string ProductTopup(string id);
+    IEnumerable<Product> GetCategoryProducts(string name);
 }

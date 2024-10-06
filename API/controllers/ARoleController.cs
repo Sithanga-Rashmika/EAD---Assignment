@@ -104,4 +104,14 @@ public class ARoleController : ControllerBase
 
         return Ok(aRole);
     }
+    [HttpGet("role/{role}")]
+    public IActionResult GetARoleByRole(string role)
+    {
+        var exarole = _arolerepository.GetARoleByRole(role);
+        if (exarole == null)
+        {
+            return NotFound(); // Return 404 if product not found
+        }
+        return Ok(exarole);
+    }
 }

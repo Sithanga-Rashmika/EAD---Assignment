@@ -114,7 +114,7 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
-       // GET: api/Product/{id} 
+    // GET: api/Product/{id} 
     [HttpGet("vendor/{id}")]
     public ActionResult<Product> GetProductByVendorID(string id)
     {
@@ -136,5 +136,35 @@ public class ProductController : ControllerBase
         }
         return Ok(product);
     }
+
+    public class ProductTopupRequest
+    {
+        public int val { get; set; }
+    }
+
+    [HttpPut("stock/update/{id}")]
+    public IActionResult ProductTopup(string id, [FromBody] ProductTopupRequest request)
+    {
+        var exarole = _productRepository.GetProductByID(id);
+        if (exarole == null)
+        {
+            return NotFound(); // Return 404 if product not found
+        }
+
+        _productRepository.ProductTopup(id, request.val);
+        return NoContent(); 
+    }
+
+    [HttpGet("category/{name}")]
+    public IActionResult GetCategoryProducts(string name)
+    {
+        var exarole = _productRepository.GetCategoryProducts(name);
+        if (exarole == null)
+        {
+            return NotFound(); // Return 404 if product not found
+        }
+        return Ok(exarole);
+    }
+
 
 }

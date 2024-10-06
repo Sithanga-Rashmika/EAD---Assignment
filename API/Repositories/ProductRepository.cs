@@ -70,4 +70,26 @@ public class ProductRepository
         Builders<Product>.Filter.Eq(p => p.VendorID, id));
         return _context.Products.Find(filter).ToList();
     }
+
+    public void ProductTopup(string id, int val)
+    {
+        var existingProduct = GetProductByID(id);
+        if (existingProduct == null)
+        {
+            throw new Exception("Product not found.");
+        }
+
+        var newQ = val + existingProduct.StockQuantity;
+
+        var update = Builders<Product>.Update
+            .Set(p => p.StockQuantity, newQ);
+
+        _context.Products.UpdateOne(p => p.ProductID == id, update);
+    }
+    public IEnumerable<Product> GetCategoryProducts(string name)
+    {
+        var filter = Builders<Product>.Filter.And(
+         Builders<Product>.Filter.Eq(p => p.Category, name));
+        return _context.Products.Find(filter).ToList(); ;
+    }
 }
