@@ -31,7 +31,6 @@ const Products = () => {
   const loading = useSelector((state) => state.product.loading);
   const categories = useSelector((state) => state.category.categories);
   const products = useSelector((state) => state.product.products);
-
   // Search state
   const [serQuary, setSerQuary] = useState("");
 
@@ -475,18 +474,13 @@ const Products = () => {
                   <div className="card overflow-hidden rounded-2">
                     {/* Product Image Section */}
                     <div className="position-relative">
-                      <img
-                        src={`http://localhost:5154${image}`}
-                        className="card-img-top rounded-0"
-                        alt="Product Image"
-                        style={{
-                          height: "auto",
-                          width: "100%",
-                          objectFit: "cover",
-                          objectPosition: "center",
-                          alignContent: "center",
-                        }}
-                      />
+                      <a href="javascript:void(0)">
+                        <img
+                          src={`http://localhost:5154${image}`}
+                          className="card-img-top rounded-0"
+                          alt="Product Image"
+                        />
+                      </a>
                     </div>
                     {/* Product Details Section */}
                     <div className="card-body pt-3 p-4">

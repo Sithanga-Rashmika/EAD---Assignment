@@ -40,7 +40,8 @@ export const retriveVendor = () => {
     dispatch({ type: vendorConstants.FETCH_VENDOR_REQUEST });
 
     try {
-      const res = await axios.get("http://localhost:5154/api/arole");
+      const res = await axios.get("http://localhost:5154/api/arole/role/Vendor");
+      console.log(res)
 
       if (res.status === 200) {
         dispatch({
@@ -67,7 +68,7 @@ export const DeleteVendor = (id) => {
   return async (dispatch) => {
     dispatch({ type: vendorConstants.DELETE_VENDOR_REQUEST });
     try {
-      const res = await axios.delete(`http://localhost:5154/api/product/${id}`);
+      const res = await axios.delete(`http://localhost:5154/api/arole/${id}`);
       if (res.status === 204) {
         dispatch({ type: vendorConstants.DELETE_VENDOR_SUCCESS });
 

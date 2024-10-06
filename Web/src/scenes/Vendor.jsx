@@ -67,18 +67,30 @@ const Vendor = () => {
     setPwd("");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
+  };
 
+  const validateMobileNumber = (contact) => {
+    const contactPattern = /^[0-9]{10}$/;
+    return contactPattern.test(contact);
+  };
+
+  const handleSubmit = () => {
     if (name === "") {
       toast.error("Name required..!", { id: 1 });
     } else if (contact === "") {
       toast.error("Contact Number required..!", { id: 2 });
+    } else if (!validateMobileNumber(contact)) {
+      toast.error("Contact Number must be a 10-digit number!", { id: 5 });
     } else if (email === "") {
       toast.error("Email required..!", { id: 3 });
+    } else if (!validateEmail(email)) {
+      toast.error("Invalid Email Format!", { id: 6 });
     } else if (pwd === "") {
       toast.error("Password required..!", { id: 4 });
-    } else if (name != "" && contact != "" && email != "" && pwd != "") {
+    } else if (name !== "" && contact !== "" && email !== "" && pwd !== "") {
       const prefix = "UID";
       const suffix = Math.floor(100000 + Math.random() * 900000);
       const UID = prefix + "_" + suffix;
@@ -178,13 +190,31 @@ const Vendor = () => {
     setSerQuary(event.target.value.toLowerCase());
   };
 
-  // const filteredCategories = categories.filter(
-  //   (category) =>
-  //     category.categoryID.toLowerCase().includes(serQuary) ||
-  //     category.categoryName.toLowerCase().includes(serQuary) ||
-  //     (category.categoryStatus ? "active" : "deactivated").includes(serQuary)
-  // );
+  const filteredVendors = vendors.filter(
+    (vendor) =>
+      vendor.aRoleID.toLowerCase().includes(serQuary) ||
+      vendor.arName.toLowerCase().includes(serQuary) ||
+      vendor.arNumber.toLowerCase().includes(serQuary) ||
+      vendor.aRoleEmail.toLowerCase().includes(serQuary)
+  );
 
+  //delete vendor
+  const deleteVendor = (id) => {
+    
+    Swal.fire({
+      title: `Are you sure you want to delete this Vendor?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#008000",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(DeleteVendor(id));
+      }
+    });
+  };
   return (
     <>
       <div className="container-fluid">
@@ -206,6 +236,8 @@ const Vendor = () => {
                   placeholder="Search"
                   aria-label="Search"
                   aria-describedby="search-addon"
+                  value={serQuary}
+                  onChange={search}
                 />
               </div>
             </div>
@@ -224,7 +256,7 @@ const Vendor = () => {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  {vendors.map((data, index) => (
+                  {filteredVendors.map((data, index) => (
                     <tr key={index}>
                       <th scope="row">{index + 1}</th>
                       <td>{data.aRoleID}</td>
@@ -244,6 +276,7 @@ const Vendor = () => {
                             style={{
                               cursor: "pointer",
                             }}
+                            onClick={() => deleteVendor(data.aRoleID)}
                           />
                         </Tooltip>
                       </td>

@@ -2,6 +2,7 @@ import { productConstants } from "../actions/constants";
 
 const initState = {
   products: [],
+  catProducts: [],
   loading: false,
 };
 
@@ -17,7 +18,7 @@ export default (state = initState, action) => {
       state = {
         ...state,
         loading: false,
-        products: [...state.products, action.payload]
+        products: [...state.products, action.payload],
       };
       break;
     case productConstants.CREATE_PRODUCT_FALIURE:
@@ -40,6 +41,25 @@ export default (state = initState, action) => {
       };
       break;
     case productConstants.FETCH_PRODUCT_FALIURE:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+    case productConstants.FETCH_PRODUCT_CAT_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case productConstants.FETCH_PRODUCT_CAT_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        catProducts: action.payload,
+      };
+      break;
+    case productConstants.FETCH_PRODUCT_CAT_FALIURE:
       state = {
         ...state,
         loading: false,
@@ -76,6 +96,24 @@ export default (state = initState, action) => {
       };
       break;
     case productConstants.UPDATE_PRODUCT_FALIURE:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+    case productConstants.TOPUP_PRODUCT_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case productConstants.TOPUP_PRODUCT_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+    case productConstants.TOPUP_PRODUCT_FALIURE:
       state = {
         ...state,
         loading: false,

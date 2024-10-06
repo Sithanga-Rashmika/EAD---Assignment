@@ -21,7 +21,7 @@ import {
   createCategory,
   retriveCategory,
   changeCategoryStatus,
-  deleteCategory
+  deleteCategory,
 } from "../actions/categoryAction";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -83,57 +83,6 @@ const Categories = () => {
     }
   };
 
-  /*search function */
-
-  const search = (event) => {
-    setSerQuary(event.target.value.toLowerCase());
-  };
-
-  const filteredCategories = categories.filter(
-    (category) =>
-      category.categoryID.toLowerCase().includes(serQuary) ||
-      category.categoryName.toLowerCase().includes(serQuary) ||
-      (category.categoryStatus ? "active" : "deactivated").includes(serQuary)
-  );
-
-  //change status function
-  const updateStatus = (data, val) => {
-    const form = {
-      CategoryId: data.categoryID,
-      Val: val,
-    };
-    Swal.fire({
-      title: `Are you sure you want to ${val ? "Activate" : "Deactivate"} this Category?`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#008000",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
-      cancelButtonText: "No!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        dispatch(changeCategoryStatus(form));
-      }
-    });
-  };
-
-  //delete  function
-  const deleteCategoryFunction = (id) => {
-    
-    Swal.fire({
-      title: `Are you sure you want to delete this Category?`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#008000",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
-      cancelButtonText: "No!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteCategory(id));
-      }
-    });
-  };
   const AddCategoryModal = () => {
     return (
       <div>
@@ -179,7 +128,58 @@ const Categories = () => {
       </div>
     );
   };
+  /*search function */
 
+  const search = (event) => {
+    setSerQuary(event.target.value.toLowerCase());
+  };
+
+  const filteredCategories = categories.filter(
+    (category) =>
+      category.categoryID.toLowerCase().includes(serQuary) ||
+      category.categoryName.toLowerCase().includes(serQuary) ||
+      (category.categoryStatus ? "active" : "deactivated").includes(serQuary)
+  );
+
+  //change status function
+  const updateStatus = (data, val) => {
+    const form = {
+      CategoryId: data.categoryID,
+      Val: val,
+    };
+    Swal.fire({
+      title: `Are you sure you want to ${
+        val ? "Activate" : "Deactivate"
+      } this Category?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#008000",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(changeCategoryStatus(form));
+      }
+    });
+  };
+
+  //delete  function
+  const deleteCategoryFunction = (id) => {
+    Swal.fire({
+      title: `Are you sure you want to delete this Category?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#008000",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteCategory(id));
+      }
+    });
+  };
   return (
     <>
       <div className="container-fluid">
@@ -261,7 +261,9 @@ const Categories = () => {
                             style={{
                               cursor: "pointer",
                             }}
-                            onClick={() => deleteCategoryFunction(data.categoryID)}
+                            onClick={() =>
+                              deleteCategoryFunction(data.categoryID)
+                            }
                           />
                         </Tooltip>
                       </td>
