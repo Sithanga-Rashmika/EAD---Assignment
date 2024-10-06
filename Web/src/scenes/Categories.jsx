@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import SettingsApplicationsRoundedIcon from "@mui/icons-material/SettingsApplicationsRounded";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
+import Swal from "sweetalert2";
 import {
   MDBBtn,
   MDBModal,
@@ -15,14 +17,22 @@ import {
 } from "mdb-react-ui-kit";
 import { TextField, MenuItem, InputBase, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
-import { createCategory, retriveCategory } from "../actions/categoryAction";
+import {
+  createCategory,
+  retriveCategory,
+  changeCategoryStatus,
+  deleteCategory
+} from "../actions/categoryAction";
 import { useSelector, useDispatch } from "react-redux";
 
 const Categories = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.category.loading);
   const categories = useSelector((state) => state.category.categories);
+
   const [category, setCategory] = useState("");
+  // Search state
+  const [serQuary, setSerQuary] = useState("");
 
   useEffect(() => {
     document.title = "Categories | BizCart";
@@ -73,6 +83,57 @@ const Categories = () => {
     }
   };
 
+  /*search function */
+
+  const search = (event) => {
+    setSerQuary(event.target.value.toLowerCase());
+  };
+
+  const filteredCategories = categories.filter(
+    (category) =>
+      category.categoryID.toLowerCase().includes(serQuary) ||
+      category.categoryName.toLowerCase().includes(serQuary) ||
+      (category.categoryStatus ? "active" : "deactivated").includes(serQuary)
+  );
+
+  //change status function
+  const updateStatus = (data, val) => {
+    const form = {
+      CategoryId: data.categoryID,
+      Val: val,
+    };
+    Swal.fire({
+      title: `Are you sure you want to ${val ? "Activate" : "Deactivate"} this Category?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#008000",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(changeCategoryStatus(form));
+      }
+    });
+  };
+
+  //delete  function
+  const deleteCategoryFunction = (id) => {
+    
+    Swal.fire({
+      title: `Are you sure you want to delete this Category?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#008000",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteCategory(id));
+      }
+    });
+  };
   const AddCategoryModal = () => {
     return (
       <div>
@@ -140,6 +201,8 @@ const Categories = () => {
                   placeholder="Search"
                   aria-label="Search"
                   aria-describedby="search-addon"
+                  value={serQuary}
+                  onChange={search}
                 />
               </div>
             </div>
@@ -157,8 +220,8 @@ const Categories = () => {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  {categories.map((data, index) => (
-                    <tr>
+                  {filteredCategories.map((data, index) => (
+                    <tr key={index}>
                       <th scope="row">{index + 1}</th>
                       <td>{data.categoryID}</td>
                       <td>{data.categoryName}</td>
@@ -175,19 +238,30 @@ const Categories = () => {
                           alignItems: "center",
                         }}
                       >
-                        <Tooltip title="Upgrade Lecture">
-                          <SettingsApplicationsRoundedIcon
+                        <Tooltip title="Activate Category">
+                          <CheckBoxIcon
                             style={{
                               cursor: "pointer",
                               marginRight: "15px",
                             }}
+                            onClick={() => updateStatus(data, true)}
                           />
                         </Tooltip>
-                        <Tooltip title="Delete Video">
+                        <Tooltip title="Deactivate Category">
+                          <DoNotDisturbIcon
+                            style={{
+                              cursor: "pointer",
+                              marginRight: "15px",
+                            }}
+                            onClick={() => updateStatus(data, false)}
+                          />
+                        </Tooltip>
+                        <Tooltip title="Delete Category">
                           <DeleteForeverRoundedIcon
                             style={{
                               cursor: "pointer",
                             }}
+                            onClick={() => deleteCategoryFunction(data.categoryID)}
                           />
                         </Tooltip>
                       </td>
