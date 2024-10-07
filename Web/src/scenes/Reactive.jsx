@@ -13,6 +13,10 @@ const Reactive = () => {
   const deactivates = useSelector((state) => state.client.deactivates);
 
   useEffect(() => {
+    document.title = "Reactive | BizCart";
+  }, []);
+
+  useEffect(() => {
     if (loading === true) {
       toast.loading("Loading...", {
         id: "loading",
@@ -105,7 +109,9 @@ const Reactive = () => {
                         <td>{data.name}</td>
                         <td>{data.contact}</td>
                         <td>{data.gender}</td>
-                        <td>{data.email}</td>
+                        <td>
+                          <a style={{ cursor: "pointer" }}>{data.email}</a>
+                        </td>
                         <td>{data.address}</td>
                         <td
                           style={{

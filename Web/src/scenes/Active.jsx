@@ -18,6 +18,10 @@ const Active = () => {
   const pendings = useSelector((state) => state.client.pendings);
 
   useEffect(() => {
+    document.title = "User Accounts | BizCart";
+  }, []);
+
+  useEffect(() => {
     if (loading === true) {
       toast.loading("Loading...", {
         id: "loading",
@@ -76,10 +80,10 @@ const Active = () => {
   const filteredPendings = pendings.filter(
     (pending) =>
       pending.name.toLowerCase().includes(serQuary) ||
-      pending.contact.toLowerCase().includes(serQuary)|| 
+      pending.contact.toLowerCase().includes(serQuary) ||
       pending.gender.toLowerCase().includes(serQuary) ||
       pending.email.toLowerCase().includes(serQuary) ||
-      pending.address.toLowerCase().includes(serQuary) 
+      pending.address.toLowerCase().includes(serQuary)
   );
   return (
     <>
@@ -128,7 +132,9 @@ const Active = () => {
                         <td>{data.name}</td>
                         <td>{data.contact}</td>
                         <td>{data.gender}</td>
-                        <td>{data.email}</td>
+                        <td>
+                          <a style={{ cursor: "pointer" }}>{data.email}</a>
+                        </td>
                         <td>{data.address}</td>
                         <td
                           style={{

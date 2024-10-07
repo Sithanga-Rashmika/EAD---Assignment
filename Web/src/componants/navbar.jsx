@@ -150,20 +150,6 @@ const Navbar = () => {
                       <p className="mb-0 fs-3">My Profile</p>
                     </a>
                     <a
-                      href="javascript:void(0)"
-                      className="d-flex align-items-center gap-2 dropdown-item"
-                    >
-                      <i className="ti ti-mail fs-6"></i>
-                      <p className="mb-0 fs-3">My Account</p>
-                    </a>
-                    <a
-                      href="javascript:void(0)"
-                      className="d-flex align-items-center gap-2 dropdown-item"
-                    >
-                      <i className="ti ti-list-check fs-6"></i>
-                      <p className="mb-0 fs-3">My Task</p>
-                    </a>
-                    <a
                       href="./authentication-login.html"
                       className="btn btn-outline-primary mx-3 mt-2 d-block"
                     >

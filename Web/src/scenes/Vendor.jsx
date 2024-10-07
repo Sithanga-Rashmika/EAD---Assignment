@@ -262,7 +262,7 @@ const Vendor = () => {
                       <td>{data.aRoleID}</td>
                       <td>{data.arName}</td>
                       <td>{data.arNumber}</td>
-                      <td>{data.aRoleEmail}</td>
+                      <td><a style={{cursor:"pointer"}}>{data.aRoleEmail}</a></td>
                       <td
                         style={{
                           display: "flex",

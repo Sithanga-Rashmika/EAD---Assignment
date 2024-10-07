@@ -1,6 +1,115 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { retrivePendings } from "../actions/clientAction";
+import { retriveProducts } from "../actions/productActions";
+import { useSelector, useDispatch } from "react-redux";
+import PersonIcon from "@mui/icons-material/Person";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ReactApexChart from "react-apexcharts";
 
 const DashBoard = () => {
+  const dispatch = useDispatch();
+  const pendings = useSelector((state) => state.client.pendings);
+  const products = useSelector((state) => state.product.products);
+
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    document.title = "Dashboard | BizCart";
+  }, []);
+
+  useEffect(() => {
+    dispatch(retrivePendings());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(retriveProducts());
+  }, [dispatch]);
+
+  //realtime date function
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formattedDate = `${currentTime
+    .getDate()
+    .toString()
+    .padStart(2, "0")}-${(currentTime.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${currentTime.getFullYear()}`;
+  const formattedTime = currentTime.toLocaleTimeString();
+  const dayName = currentTime.toLocaleDateString("en-US", { weekday: "long" });
+
+  //count the users who waiting until account accept
+  const pendingCount = pendings.length;
+
+  // product category count from products array
+  const categoryCounts = products.reduce((acc, product) => {
+    const category = product.category || "Uncategorized";
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
+    acc[category] += 1;
+    return acc;
+  }, {});
+
+  // Prepare data for the chart
+  const categories = Object.keys(categoryCounts); // X-axis labels
+  const counts = Object.values(categoryCounts); // Y-axis values
+
+  // ApexChart options and data
+  const chartOptions = {
+    chart: {
+      type: "bar",
+      height: 350,
+    },
+
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "55%",
+        endingShape: "rounded",
+      },
+    },
+
+    xaxis: {
+      categories: categories,
+      labels: {
+        style: {
+          colors: "#6c757d",
+          fontSize: "12px",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 500,
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Number of Items",
+        style: {
+          colors: "#6c757d",
+          fontSize: "12px",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 500,
+        },
+      },
+    },
+    colors: ["#008FFB"], // Set a custom color for bars
+    dataLabels: {
+      enabled: true,
+    },
+  };
+
+  const chartSeries = [
+    {
+      name: "Items",
+      data: counts, // Values for each category
+    },
+  ];
+
   return (
     <div>
       <div className="container-fluid">
@@ -10,18 +119,15 @@ const DashBoard = () => {
               <div className="card-body">
                 <div className="d-sm-flex d-block align-items-center justify-content-between mb-9">
                   <div className="mb-3 mb-sm-0">
-                    <h5 className="card-title fw-semibold">Sales Overview</h5>
-                  </div>
-                  <div>
-                    <select className="form-select">
-                      <option value="1">March 2023</option>
-                      <option value="2">April 2023</option>
-                      <option value="3">May 2023</option>
-                      <option value="4">June 2023</option>
-                    </select>
+                    <h5 className="card-title fw-semibold">Inventory Chart</h5>
                   </div>
                 </div>
-                <div id="chart"></div>
+                <ReactApexChart
+                  options={chartOptions}
+                  series={chartSeries}
+                  type="bar"
+                  height={350}
+                />
               </div>
             </div>
           </div>
@@ -30,31 +136,21 @@ const DashBoard = () => {
               <div className="col-lg-12">
                 <div className="card overflow-hidden">
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-9 fw-semibold">Yearly Breakup</h5>
+                    <h5 className="card-title mb-9 fw-semibold">{dayName}</h5>
                     <div className="row align-items-center">
                       <div className="col-8">
-                        <h4 className="fw-semibold mb-3">$36,358</h4>
+                        <h4 className="fw-semibold mb-3">{formattedDate}</h4>
                         <div className="d-flex align-items-center mb-3">
-                          <span className="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                            <i className="ti ti-arrow-up-left text-success"></i>
-                          </span>
-                          <p className="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p className="fs-3 mb-0">last year</p>
-                        </div>
-                        <div className="d-flex align-items-center">
-                          <div className="me-4">
-                            <span className="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                            <span className="fs-2">2023</span>
-                          </div>
-                          <div>
-                            <span className="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
-                            <span className="fs-2">2023</span>
-                          </div>
+                          <p className="text-dark me-1 fs-3 mb-0">
+                            {formattedTime}
+                          </p>
                         </div>
                       </div>
                       <div className="col-4">
-                        <div className="d-flex justify-content-center">
-                          <div id="breakup"></div>
+                        <div className="d-flex justify-content-end">
+                          <div className="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                            <AccessTimeIcon fontSize="large" />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -68,27 +164,19 @@ const DashBoard = () => {
                       <div className="col-8">
                         <h5 className="card-title mb-9 fw-semibold">
                           {" "}
-                          Monthly Earnings{" "}
+                          New User Accounts{" "}
                         </h5>
-                        <h4 className="fw-semibold mb-3">$6,820</h4>
-                        <div className="d-flex align-items-center pb-1">
-                          <span className="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                            <i className="ti ti-arrow-down-right text-danger"></i>
-                          </span>
-                          <p className="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p className="fs-3 mb-0">last year</p>
-                        </div>
+                        <h4 className="fw-semibold mb-3">{pendingCount}</h4>
                       </div>
                       <div className="col-4">
                         <div className="d-flex justify-content-end">
                           <div className="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                            <i className="ti ti-currency-dollar fs-6"></i>
+                            <PersonIcon fontSize="large" />
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div id="earning"></div>
                 </div>
               </div>
             </div>
@@ -99,7 +187,9 @@ const DashBoard = () => {
             <div className="card w-100">
               <div className="card-body p-4">
                 <div className="mb-4">
-                  <h5 className="card-title fw-semibold">Recent Transactions</h5>
+                  <h5 className="card-title fw-semibold">
+                    Recent Transactions
+                  </h5>
                 </div>
                 <ul className="timeline-widget mb-0 position-relative mb-n5">
                   <li className="timeline-item d-flex position-relative overflow-hidden">
@@ -192,7 +282,9 @@ const DashBoard = () => {
           <div className="col-lg-8 d-flex align-items-stretch">
             <div className="card w-100">
               <div className="card-body p-4">
-                <h5 className="card-title fw-semibold mb-4">Recent Transactions</h5>
+                <h5 className="card-title fw-semibold mb-4">
+                  Recent Transactions
+                </h5>
                 <div className="table-responsive">
                   <table className="table text-nowrap mb-0 align-middle">
                     <thead className="text-dark fs-4">
@@ -242,7 +334,9 @@ const DashBoard = () => {
                           <h6 className="fw-semibold mb-0">2</h6>
                         </td>
                         <td className="border-bottom-0">
-                          <h6 className="fw-semibold mb-1">Andrew McDownland</h6>
+                          <h6 className="fw-semibold mb-1">
+                            Andrew McDownland
+                          </h6>
                           <span className="fw-normal">Project Manager</span>
                         </td>
                         <td className="border-bottom-0">
@@ -264,7 +358,9 @@ const DashBoard = () => {
                           <h6 className="fw-semibold mb-0">3</h6>
                         </td>
                         <td className="border-bottom-0">
-                          <h6 className="fw-semibold mb-1">Christopher Jamil</h6>
+                          <h6 className="fw-semibold mb-1">
+                            Christopher Jamil
+                          </h6>
                           <span className="fw-normal">Project Manager</span>
                         </td>
                         <td className="border-bottom-0">
