@@ -30,8 +30,6 @@ const Orders = () => {
   const [number, setNumber] = useState("");
   const [productId, setProductId] = useState("");
   const [operation, setOperation] = useState("");
-  console.log(operation);
-  console.log(number);
 
   useEffect(() => {
     if (loading === true) {
@@ -154,15 +152,6 @@ const Orders = () => {
               <a className="btn btn-info m-1" href="/inventory">
                 Back
               </a>
-              <div className="input-group" id="searchh">
-                <input
-                  type="search"
-                  className="form-control rounded"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                />
-              </div>
             </div>
             <div className="table-responsive" style={{ marginTop: "40px" }}>
               <MDBTable hover>

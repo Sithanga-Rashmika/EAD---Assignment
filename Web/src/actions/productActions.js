@@ -165,7 +165,7 @@ export const topUpStock = (id, form) => {
         dispatch({
           type: productConstants.TOPUP_PRODUCT_SUCCESS,
         });
-        toast.success("Item Quntity Top Uped..!", { id: "t5" });
+        toast.success("Item Quntity Changed..!", { id: "t5" });
         window.location.reload();
       } else {
         dispatch({ type: productConstants.TOPUP_PRODUCT_FALIURE });

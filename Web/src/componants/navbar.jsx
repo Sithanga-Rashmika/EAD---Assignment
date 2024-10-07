@@ -77,31 +77,46 @@ const Navbar = () => {
                       Notifications
                     </h4>
                     {/* Map each notification to its own div */}
-                    {notifications.map((data, index) => (
+                    {notifications.length > 0 ? (
+                      notifications.map((data, index) => (
+                        <div
+                          key={index}
+                          className="notification-item"
+                          style={{
+                            border: "1px solid #ddd",
+                            padding: "10px",
+                            marginBottom: "8px",
+                            borderRadius: "5px",
+                            backgroundColor: "#f9f9f9",
+                            cursor: "pointer",
+                          }}
+                          onMouseOver={(e) =>
+                            (e.currentTarget.style.backgroundColor = "#f2f2f2")
+                          }
+                          onMouseOut={(e) =>
+                            (e.currentTarget.style.backgroundColor = "#f9f9f9")
+                          }
+                        >
+                          <strong>Low Stock Alert:</strong> '{data.name}' (
+                          {data.productID}) has only{" "}
+                          <strong>{data.stockQuantity}</strong> units left.
+                          Please top up to avoid running out.
+                        </div>
+                      ))
+                    ) : (
                       <div
-                        key={index}
-                        className="notification-item"
+                        className="no-notifications"
                         style={{
+                          textAlign: "center",
+                          padding: "15px",
                           border: "1px solid #ddd",
-                          padding: "10px",
-                          marginBottom: "8px",
                           borderRadius: "5px",
                           backgroundColor: "#f9f9f9",
-                          cursor: "pointer",
                         }}
-                        onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#f2f2f2")
-                        }
-                        onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#f9f9f9")
-                        }
                       >
-                        <strong>Low Stock Alert:</strong> '{data.name}' (
-                        {data.productID}) has only{" "}
-                        <strong>{data.stockQuantity}</strong> units left. Please
-                        top up to avoid running out.
+                        No notifications
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </li>
