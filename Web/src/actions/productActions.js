@@ -123,13 +123,14 @@ export const updateProducts = (id, form) => {
   };
 };
 
-
 export const retriveProductsByCategory = (type) => {
   return async (dispatch) => {
     dispatch({ type: productConstants.FETCH_PRODUCT_CAT_REQUEST });
 
     try {
-      const res = await axios.get(`http://localhost:5154/api/product/category/${type}`);
+      const res = await axios.get(
+        `http://localhost:5154/api/product/category/${type}`
+      );
 
       if (res.status === 200) {
         dispatch({
@@ -152,7 +153,6 @@ export const retriveProductsByCategory = (type) => {
   };
 };
 
-
 export const topUpStock = (id, form) => {
   return async (dispatch) => {
     dispatch({ type: productConstants.TOPUP_PRODUCT_REQUEST });
@@ -173,11 +173,20 @@ export const topUpStock = (id, form) => {
       }
     } catch (error) {
       if (error.response) {
+        if (error.response.status === 400) {
+          dispatch({ type: productConstants.TOPUP_PRODUCT_FALIURE });
+          toast.error("Cannot reduce stock beyond available quantity..!", {
+            id: "t3",
+          });
+        } else {
+          dispatch({ type: productConstants.TOPUP_PRODUCT_FALIURE });
+          toast.error("Something went wrong..!", { id: "t5" });
+        }
+      } else {
         dispatch({ type: productConstants.TOPUP_PRODUCT_FALIURE });
-        toast.error("Something went wrong..!", { id: "t2" });
-      } else if (error.request) {
-        dispatch({ type: productConstants.TOPUP_PRODUCT_FALIURE });
-        toast.error("Server not respond..!", { id: "t3" });
+        toast.error("Unable to connect to the server. Please try again.", {
+          id: "t2",
+        });
       }
     }
   };
@@ -188,7 +197,9 @@ export const vendorNotification = (id) => {
     dispatch({ type: productConstants.NOTIFICATION_PRODUCT_REQUEST });
 
     try {
-      const res = await axios.get(`http://localhost:5154/api/product/vendor/${id}`);
+      const res = await axios.get(
+        `http://localhost:5154/api/product/vendor/${id}`
+      );
 
       if (res.status === 200) {
         dispatch({

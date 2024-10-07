@@ -39,8 +39,8 @@ public class UserController : ControllerBase
 
 
     // Activate user account by CSR or Administrator
-    [HttpPost("activate")]
-    public IActionResult ActivateUser([FromQuery] string email)
+    [HttpPost("activate/{email}")]
+    public IActionResult ActivateUser([FromRoute] string email)
     {
         var user = _userRepository.GetUserByEmail(email);
         if (user == null)
@@ -84,8 +84,8 @@ public class UserController : ControllerBase
     }
 
     // Deactivate user account (customer can deactivate their own account)
-    [HttpPost("deactivate")]
-    public IActionResult DeactivateUser([FromQuery] string email)
+    [HttpPost("deactivate/{email}")]
+    public IActionResult DeactivateUser([FromRoute] string email)
     {
         var user = _userRepository.GetUserByEmail(email);
         if (user == null)
@@ -97,6 +97,7 @@ public class UserController : ControllerBase
         _userRepository.UpdateUser(user);
         return Ok("User account deactivated successfully.");
     }
+
 
     // Reactivate a deactivated account by CSR or Administrator
     // [HttpPost("reactivate")]

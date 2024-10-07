@@ -41,7 +41,6 @@ export const retriveVendor = () => {
 
     try {
       const res = await axios.get("http://localhost:5154/api/arole/role/Vendor");
-      console.log(res)
 
       if (res.status === 200) {
         dispatch({
