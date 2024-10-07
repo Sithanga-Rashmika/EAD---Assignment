@@ -10,10 +10,12 @@ public class MyOrderController : ControllerBase
     private readonly MyOrderRepository _myorderrepository;
     private readonly ProductRepository _productrepository;
 
-    public MyOrderController(MyOrderRepository myOrderRepository,  ProductRepository productRepository)
+    private readonly CartRepository _cartRepository;
+    public MyOrderController(MyOrderRepository myOrderRepository, ProductRepository productRepository, CartRepository cartRepository)
     {
         _myorderrepository = myOrderRepository;
         _productrepository = productRepository;
+        _cartRepository = cartRepository;
     }
 
     // GET: api/Product
@@ -123,5 +125,69 @@ public class MyOrderController : ControllerBase
     //     }
 
     //     return Ok(aRole);
-    // }
+    // }// POST: api/Order/AddFromCart/{cartID}
+    [HttpPost("AddFromCart/{cartID}")]
+    public IActionResult AddOrderFromCart(string cartID)
+    {
+        // Step 1: Retrieve all cart items for the given cartID
+        var cartItems = _cartRepository.GetCartItemsByCartID(cartID);
+        if (cartItems == null || cartItems.Count == 0)
+        {
+            return NotFound(new { message = "Cart is empty or does not exist" });
+        }
+
+        // Create an empty list to hold orders
+        List<MyOrder> orders = new List<MyOrder>();
+
+        // Step 2: Process each cart item
+        foreach (var cartItem in cartItems)
+        {
+            // Retrieve the product by ProductID from the cart item
+            var product = _productrepository.GetProductByID(cartItem.ProductID);
+
+            if (product == null)
+            {
+                return NotFound(new { message = $"Product with ID {cartItem.ProductID} not found." });
+            }
+
+            // Step 3: Check if there is enough stock for the product
+            if (product.StockQuantity < cartItem.Quantity)
+            {
+                return BadRequest(new { message = $"Insufficient stock for product {product.Name}. Available: {product.StockQuantity}, Requested: {cartItem.Quantity}" });
+            }
+
+            // Step 4: Reduce the stock quantity for the product
+            product.StockQuantity -= cartItem.Quantity;
+            _productrepository.UpdateProduct(product); // Update product stock
+
+            // Step 5: Create a new order for the cart item
+            var order = new MyOrder
+            {
+                OrderID = Guid.NewGuid().ToString(), // Generate a unique Order ID
+                UserID = cartItem.CustomerID,
+                ProductID = cartItem.ProductID,
+                Quantity = cartItem.Quantity,
+                Price = cartItem.Price,
+                OrderDate = DateTime.Now,
+                CartID = cartItem.CartID,
+                ProductName = cartItem.ProductName,
+                OrderStatus = "pending",
+                VendorID = cartItem.VendorID
+            };
+
+            // Add the new order to the list of orders
+            orders.Add(order);
+
+            // Add the order to the order repository
+            _myorderrepository.AddMyOrder(order);
+        }
+
+        // Step 6: Clear the cart by deleting all items with the given cartID
+        _cartRepository.DeleteCartByCartID(cartID);
+
+        // Return the created orders
+        return Ok(new { message = "Order placed successfully", orders = orders });
+    }
+
+
 }

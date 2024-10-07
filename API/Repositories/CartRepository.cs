@@ -46,4 +46,20 @@ public class CartRepository
                        .Find(cart => cart.ProductID == productID && cart.CustomerID == customerID)
                        .FirstOrDefault();
     }
+
+    public Cart GetCartById(string cartID)
+    {
+        return _context.Carts.Find(cart => cart.CartID == cartID).FirstOrDefault();
+    }
+    public List<Cart> GetCartItemsByCartID(string cartID)
+    {
+        return _context.Carts.Find(cart => cart.CartID == cartID).ToList();
+    }
+
+    public void DeleteCartByCartID(string cartID)
+    {
+        _context.Carts.DeleteMany(cart => cart.CartID == cartID);
+    }
+
+
 }

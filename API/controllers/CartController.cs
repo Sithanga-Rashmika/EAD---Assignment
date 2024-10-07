@@ -37,6 +37,7 @@ public class CartController : ControllerBase
             Price = price ?? 0.0,
             Status = status ?? "Unknown",
             Date = DateTime.Now
+
         };
         var product = _productRepository.GetProductByID(cart.ProductID);
         if (product == null)
@@ -80,4 +81,21 @@ public class CartController : ControllerBase
         _cartRepository.DeleteCart(cart.Id.ToString());
         return Ok("Cart item deleted successfully.");
     }
+
+    // Delete a cart item by CartID
+    [HttpDelete("delete/{cartID}")]
+    public IActionResult DeleteCartById(string cartID)
+    {
+        // Find the cart by CartID
+        var cart = _cartRepository.GetCartById(cartID);
+        if (cart == null)
+        {
+            return NotFound("Cart item not found.");
+        }
+
+        // Delete the cart item using its ID
+        _cartRepository.DeleteCart(cart.CartID);
+        return Ok("Cart item deleted successfully.");
+    }
+
 }

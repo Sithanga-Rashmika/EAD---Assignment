@@ -34,5 +34,5 @@ public class MyOrder
     public string OrderStatus { get; set; }
 
     [BsonElement("date")]
-    public string OrderDate { get; set; }
+    public DateTime OrderDate { get; set; }
 }
