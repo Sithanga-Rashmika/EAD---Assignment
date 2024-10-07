@@ -189,5 +189,25 @@ public class MyOrderController : ControllerBase
         return Ok(new { message = "Order placed successfully", orders = orders });
     }
 
+    // PUT: api/Order/UpdateStatus/{orderId}
+    [HttpPut("UpdateStatus/{orderId}")]
+    public IActionResult UpdateOrderStatus(string orderId, [FromForm] string orderStatus)
+    {
+        // Step 1: Retrieve the order by orderId
+        var order = _myorderrepository.GetOrderById(orderId);
+        if (order == null)
+        {
+            return NotFound(new { message = "Order not found." });
+        }
+
+        // Step 2: Update the order status
+        order.OrderStatus = orderStatus;
+
+        // Step 3: Save the updated order back to the repository
+        _myorderrepository.UpdateOrder(order);
+
+        // Return a success message
+        return Ok(new { message = "Order status updated successfully." });
+    }
 
 }

@@ -48,4 +48,15 @@ public class MyOrderRepository
     // {
     //     return _context.Aroles.Find(a => a.ARoleEmail == email).FirstOrDefault();
     // }
+
+    public void UpdateOrder(MyOrder order)
+    {
+        _context.Myorders.ReplaceOne(o => o.OrderID == order.OrderID, order);
+    }
+
+    public MyOrder GetOrderById(string orderId)
+    {
+        return _context.Myorders.Find(order => order.OrderID == orderId).FirstOrDefault();
+    }
+
 }
