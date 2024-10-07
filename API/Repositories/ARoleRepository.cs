@@ -34,7 +34,11 @@ public class ARoleRepository
 
         // Manually update the fields that need to be changed, ensuring _id remains the same
         exarole.ARoleEmail = aRole.ARoleEmail;
-        exarole.ARolePasswrod = aRole.ARolePasswrod;
+        // Hash the password if it has changed chnaged by sithanga 
+        if (!string.IsNullOrEmpty(aRole.ARolePasswrod) && aRole.ARolePasswrod != exarole.ARolePasswrod)
+        {
+            exarole.ARolePasswrod = BCrypt.Net.BCrypt.HashPassword(aRole.ARolePasswrod);
+        }
         exarole.ARoleTyoe = aRole.ARoleTyoe;
         exarole.ARName = aRole.ARName;
         exarole.ARNumber = aRole.ARNumber;

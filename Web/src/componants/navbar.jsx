@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { vendorNotification } from "../actions/productActions";
 import { useSelector, useDispatch } from "react-redux";
-
+import { signout } from "../actions/userAction";
 const Navbar = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.product.loading);
@@ -25,6 +25,10 @@ const Navbar = () => {
   useEffect(() => {
     dispatch(vendorNotification(id));
   }, [dispatch]);
+
+  const logout = () => {
+    dispatch(signout());
+  };
   return (
     <>
       <header className="app-header">
@@ -143,14 +147,14 @@ const Navbar = () => {
                 >
                   <div className="message-body">
                     <a
-                      href="javascript:void(0)"
+                      href="/profile"
                       className="d-flex align-items-center gap-2 dropdown-item"
                     >
                       <i className="ti ti-user fs-6"></i>
                       <p className="mb-0 fs-3">My Profile</p>
                     </a>
                     <a
-                      href="./authentication-login.html"
+                      onClick={logout}
                       className="btn btn-outline-primary mx-3 mt-2 d-block"
                     >
                       Logout
