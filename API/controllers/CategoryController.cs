@@ -85,8 +85,11 @@ public class CategoryController : ControllerBase
             return BadRequest(new { message = "Category ID is missing or invalid" });
         }
 
-        _categoryRepository.UpdateCategoryStatus(request.CategoryId, request.Val);
-        return NoContent(); // Return 204 No Content on successful update
+        // add new variable to catch the return ***sithanga***
+        var updatedCategory = _categoryRepository.UpdateCategoryStatus(request.CategoryId, request.Val);
+
+        return Ok(updatedCategory); // return it ***sithanga****
     }
+
 
 }

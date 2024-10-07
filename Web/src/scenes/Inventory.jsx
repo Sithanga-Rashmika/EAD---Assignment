@@ -3,21 +3,67 @@ import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SettingsApplicationsRoundedIcon from "@mui/icons-material/SettingsApplicationsRounded";
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-} from "mdb-react-ui-kit";
-import { TextField, MenuItem, InputBase, IconButton } from "@mui/material";
+import { retriveProducts } from "../actions/productActions";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 const Inventory = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.product.loading);
+  const products = useSelector((state) => state.product.products);
+
   useEffect(() => {
     document.title = "Inventory | BizCart";
   }, []);
+
+  useEffect(() => {
+    if (loading === true) {
+      toast.loading("Loading...", {
+        id: "loading",
+      });
+    } else if (loading === false) {
+      toast.dismiss("loading");
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    dispatch(retriveProducts());
+  }, [dispatch]);
+
+  // Grouping products by category and picking the first image per category, along with total quantity
+  const categoryCounts = products.reduce((acc, product) => {
+    const { category, imageUrl, stockQuantity } = product;
+
+    if (category) {
+      // Initialize category if not present in the accumulator
+      if (!acc[category]) {
+        acc[category] = {
+          count: 0, // To keep track of the number of products in this category
+          totalQuantity: 0, // To sum up the quantity of all products in this category
+          image: imageUrl, // Set the first image found for this category
+        };
+      }
+
+      // Increment the count for the category
+      acc[category].count += 1;
+
+      // Add the stock quantity of the current product to the total quantity
+      acc[category].totalQuantity += stockQuantity;
+    }
+
+    return acc;
+  }, {});
+
+  // Convert the grouped object into an array of objects with category, count, totalQuantity, and image
+  const categoryCountArray = Object.entries(categoryCounts).map(
+    ([category, { count, totalQuantity, image }]) => ({
+      category,
+      count,
+      totalQuantity, // Include the total quantity for the category
+      image: `http://localhost:5154${image}`, // Construct full URL for the image
+    })
+  );
+
   return (
     <>
       <div className="container-fluid">
@@ -28,126 +74,37 @@ const Inventory = () => {
               All the available categories display as below.
             </p>
             <hr />
-            <div className="head-section">
-              <button className="btn btn-info m-1" >
-                Add New Category
-              </button>
-              <div className="input-group" id="searchh">
-                <input
-                  type="search"
-                  className="form-control rounded"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                />
-              </div>
-            </div>
-            <div className="table-responsive" style={{ marginTop: "40px" }}>
-              <MDBTable hover>
-                <MDBTableHead className="table-dark">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">CID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Actions
-                    </th>
-                  </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>PID1234</td>
-                    <td>VID5678</td>
-                    <td>Product 1</td>
-                    <td
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Tooltip title="Upgrade Lecture">
-                        <SettingsApplicationsRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                            marginRight: "15px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete Video">
-                        <DeleteForeverRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>PID2234</td>
-                    <td>VID6678</td>
-                    <td>Product 2</td>
-                    <td
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Tooltip title="Upgrade Lecture">
-                        <SettingsApplicationsRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                            marginRight: "15px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete Video">
-                        <DeleteForeverRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>PID3234</td>
-                    <td>VID7678</td>
-                    <td>Product 3</td>
-                    <td
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Tooltip title="Upgrade Lecture">
-                        <SettingsApplicationsRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                            marginRight: "15px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete Video">
-                        <DeleteForeverRoundedIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                </MDBTableBody>
-              </MDBTable>
+
+            <div
+              className="row"
+              style={{ marginTop: "3rem", cursor: "pointer" }}
+            >
+              {categoryCountArray.map((data, index) => (
+                <div className="col-sm-6 col-xl-3" key={index}>
+                  <Link to={`/category/${data.category}`}>
+                    <div className="card overflow-hidden rounded-2">
+                      <div className="position-relative">
+                        <a href="javascript:void(0)">
+                          <img
+                            src={`${data.image}`}
+                            className="card-img-top rounded-0"
+                            alt="..."
+                          />
+                        </a>
+                      </div>
+                      <div className="card-body pt-3 p-4">
+                        <h3 style={{fontWeight:"700"}}>{data.category}</h3>
+                        <h6 className="fw-semibold fs-4 mb-0">
+                          Product Count - {data.count}
+                        </h6>
+                        <h6 className="fw-semibold fs-4 mb-0">
+                          Total Quantity - {data.totalQuantity}
+                        </h6>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </div>

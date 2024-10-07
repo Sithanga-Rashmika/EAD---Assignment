@@ -143,13 +143,13 @@ public class ARoleController : ControllerBase
     }
 
     [HttpGet("role/{role}")]
-    public IActionResult GetARoleByRole(string role)
+    public IActionResult GetARolesByRole(string role)
     {
-        var exarole = _arolerepository.GetARoleByRole(role);
-        if (exarole == null)
+        var roles = _arolerepository.GetARolesByRole(role);
+        if (roles == null || roles.Count == 0)
         {
-            return NotFound(); // Return 404 if product not found
+            return NotFound(new { message = $"No roles found for the role: {role}" });
         }
-        return Ok(exarole);
+        return Ok(roles);
     }
 }

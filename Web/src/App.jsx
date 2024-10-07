@@ -15,6 +15,7 @@ import Cancel from './scenes/Cancel';
 import Vendor from './scenes/Vendor';
 import Active from './scenes/Active';
 import Reactive from './scenes/Reactive';
+import Items from './scenes/Items'
 
 
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/vendor" element={<Vendor />} />
           <Route path="/active" element={<Active />} />
           <Route path="/reactive" element={<Reactive />} />
+          <Route path="/category/:type" element={<Items />} />
         </Route>
       </Routes>
     </>

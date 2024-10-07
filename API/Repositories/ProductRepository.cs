@@ -86,6 +86,30 @@ public class ProductRepository
 
         _context.Products.UpdateOne(p => p.ProductID == id, update);
     }
+
+    //created by sithanga 
+    public void ProductRemove(string id, int val)
+{
+    var existingProduct = GetProductByID(id);
+    if (existingProduct == null)
+    {
+        throw new Exception("Product not found.");
+    }
+
+    // Ensure stock does not go below zero
+    var newQ = existingProduct.StockQuantity - val;
+    if (newQ < 0)
+    {
+        throw new Exception("Insufficient stock to remove.");
+    }
+
+    var update = Builders<Product>.Update
+        .Set(p => p.StockQuantity, newQ);
+
+    _context.Products.UpdateOne(p => p.ProductID == id, update);
+}
+
+//this is not worked properly fetch only 1 item so i edit not its working properly do not change
     public IEnumerable<Product> GetCategoryProducts(string name)
     {
         var filter = Builders<Product>.Filter.And(

@@ -15,6 +15,9 @@ public class User
     [BsonElement("contact")]
     public string Contact { get; set; }
 
+    [BsonElement("name")]
+    public string Name { get; set; }
+
     [BsonElement("address")]
     public string Address { get; set; }
 
@@ -22,8 +25,6 @@ public class User
     public string Gender { get; set; }
 
     [BsonElement("isActive")]
-    public bool IsActive { get; set; }
+    public string IsActive { get; set; }
 
-    [BsonElement("isDeactivatedByCSR")]
-    public bool IsDeactivatedByCSR { get; set; }
 }

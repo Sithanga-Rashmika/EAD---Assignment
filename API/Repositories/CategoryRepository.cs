@@ -44,7 +44,8 @@ public class CategoryRepository
         _context.Categories.DeleteOne(c => c.CategoryID == id);
     }
 
-    public void UpdateCategoryStatus(string id, bool val)
+
+    public Category UpdateCategoryStatus(string id, bool val) //return type change void into Category
     {
         var exCategory = GetCategoryByID(id);
         if (exCategory == null)
@@ -54,7 +55,11 @@ public class CategoryRepository
         
         exCategory.CategoryStatus = val;
         _context.Categories.ReplaceOne(c => c.CategoryID == id, exCategory);
+        return exCategory;
     }
+
+
+
 
 
 }

@@ -137,23 +137,45 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
-    public class ProductTopupRequest
+    public class ProductStockUpdateRequest
     {
-        public int val { get; set; }
+        public int Value { get; set; } 
+        public string Operation { get; set; } 
     }
 
+//this function fully change according to the requiremnt by sithanga now 
     [HttpPut("stock/update/{id}")]
-    public IActionResult ProductTopup(string id, [FromBody] ProductTopupRequest request)
+    public IActionResult UpdateProductStock(string id, [FromBody] ProductStockUpdateRequest request)
     {
-        var exarole = _productRepository.GetProductByID(id);
-        if (exarole == null)
+        var product = _productRepository.GetProductByID(id);
+        if (product == null)
         {
-            return NotFound(); // Return 404 if product not found
+            return NotFound(new { message = "Product not found." });
         }
 
-        _productRepository.ProductTopup(id, request.val);
-        return NoContent(); 
+        try
+        {
+            if (request.Operation.ToLower() == "topup")
+            {
+                _productRepository.ProductTopup(id, request.Value);
+            }
+            else if (request.Operation.ToLower() == "remove")
+            {
+                _productRepository.ProductRemove(id, request.Value);
+            }
+            else
+            {
+                return BadRequest(new { message = "Invalid operation. Use 'topup' or 'remove'." });
+            }
+
+            return Ok(new { message = $"Product {request.Operation} successful.", newQuantity = _productRepository.GetProductByID(id).StockQuantity });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
+
 
     [HttpGet("category/{name}")]
     public IActionResult GetCategoryProducts(string name)

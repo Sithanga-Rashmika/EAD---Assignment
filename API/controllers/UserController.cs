@@ -21,15 +21,26 @@ public class UserController : ControllerBase
             return BadRequest("User already exists.");
         }
 
-        user.IsActive = false; // Account needs activation by CSR
+        user.IsActive = "Pending";
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _userRepository.AddUser(user);
         return Ok("User registered successfully. Awaiting CSR activation.");
     }
+    [HttpGet("status/{status}")]
+    public IActionResult GetUsersByStatus(string status)
+    {
+        var users = _userRepository.GetUsersByStatus(status);
+        if (users == null || users.Count == 0)
+        {
+            return NotFound($"No users found with status '{status}'.");
+        }
+        return Ok(users);
+    }
+
 
     // Activate user account by CSR or Administrator
-    [HttpPost("activate")]
-    public IActionResult ActivateUser([FromQuery] string email)
+    [HttpPost("activate/{email}")]
+    public IActionResult ActivateUser([FromRoute] string email)
     {
         var user = _userRepository.GetUserByEmail(email);
         if (user == null)
@@ -37,7 +48,7 @@ public class UserController : ControllerBase
             return NotFound("User does not exist.");
         }
 
-        user.IsActive = true;
+        user.IsActive = "Active";
         _userRepository.UpdateUser(user);
         return Ok("User activated successfully.");
     }
@@ -52,7 +63,7 @@ public class UserController : ControllerBase
             return NotFound("User does not exist.");
         }
 
-        if (!existingUser.IsActive)
+        if (existingUser.IsActive != "Active")
         {
             return BadRequest("Account is inactive. Please contact CSR to activate it.");
         }
@@ -64,22 +75,17 @@ public class UserController : ControllerBase
         }
         existingUser.Password = modifiedUser.Password ?? existingUser.Password;
         existingUser.Contact = modifiedUser.Contact ?? existingUser.Contact;
+        existingUser.Name = modifiedUser.Name ?? existingUser.Name;
         existingUser.Address = modifiedUser.Address ?? existingUser.Address;
         existingUser.Gender = modifiedUser.Gender ?? existingUser.Gender;
-
-        // Check if isDeactivatedByCSR field was provided, else retain the existing value
-        if (modifiedUser.IsDeactivatedByCSR != default(bool) || modifiedUser.IsDeactivatedByCSR == false)
-        {
-            existingUser.IsDeactivatedByCSR = modifiedUser.IsDeactivatedByCSR;
-        }
 
         _userRepository.UpdateUser(existingUser);
         return Ok("User details updated successfully.");
     }
 
     // Deactivate user account (customer can deactivate their own account)
-    [HttpPost("deactivate")]
-    public IActionResult DeactivateUser([FromQuery] string email)
+    [HttpPost("deactivate/{email}")]
+    public IActionResult DeactivateUser([FromRoute] string email)
     {
         var user = _userRepository.GetUserByEmail(email);
         if (user == null)
@@ -87,32 +93,32 @@ public class UserController : ControllerBase
             return NotFound("User does not exist.");
         }
 
-        user.IsActive = false;
-        user.IsDeactivatedByCSR = true;
+        user.IsActive = "Deactivated";
         _userRepository.UpdateUser(user);
         return Ok("User account deactivated successfully.");
     }
 
+
     // Reactivate a deactivated account by CSR or Administrator
-    [HttpPost("reactivate")]
-    public IActionResult ReactivateUser([FromQuery] string email)
-    {
-        var user = _userRepository.GetUserByEmail(email);
-        if (user == null)
-        {
-            return NotFound("User does not exist.");
-        }
+    // [HttpPost("reactivate")]
+    // public IActionResult ReactivateUser([FromQuery] string email)
+    // {
+    //     var user = _userRepository.GetUserByEmail(email);
+    //     if (user == null)
+    //     {
+    //         return NotFound("User does not exist.");
+    //     }
 
-        if (!user.IsDeactivatedByCSR)
-        {
-            return BadRequest("Account was not deactivated by CSR.");
-        }
+    //     if (!user.IsDeactivatedByCSR)
+    //     {
+    //         return BadRequest("Account was not deactivated by CSR.");
+    //     }
 
-        user.IsActive = true;
-        user.IsDeactivatedByCSR = false;
-        _userRepository.UpdateUser(user);
-        return Ok("User reactivated successfully.");
-    }
+    //     user.IsActive = true;
+    //     user.IsDeactivatedByCSR = false;
+    //     _userRepository.UpdateUser(user);
+    //     return Ok("User reactivated successfully.");
+    // }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] Dictionary<string, string> loginData)
@@ -132,7 +138,7 @@ public class UserController : ControllerBase
         }
 
         // Verify if the account is active
-        if (!existingUser.IsActive)
+        if (existingUser.IsActive != "Active")
         {
             return BadRequest("Account is inactive. Please contact CSR to activate it.");
         }

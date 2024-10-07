@@ -1,88 +1,82 @@
-import { categoryConstants } from "../actions/constants";
+import { clientConstants } from "../actions/constants";
 
 const initState = {
-  categories: [],
+  pendings: [],
+  deactivates: [],
   loading: false,
 };
 
 export default (state = initState, action) => {
   switch (action.type) {
-    case categoryConstants.CREATE_CATEGORY_REQUEST:
+    case clientConstants.FETCH_PENDING_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.CREATE_CATEGORY_SUCCESS:
+    case clientConstants.FETCH_PENDING_SUCCESS:
       state = {
         ...state,
         loading: false,
-        categories: [...state.categories, action.payload],
+        pendings: action.payload,
       };
       break;
-    case categoryConstants.CREATE_CATEGORY_FALIURE:
+    case clientConstants.FETCH_PENDING_FALIURE:
       state = {
         ...state,
         loading: false,
       };
       break;
-    case categoryConstants.FETCH_CATEGORY_REQUEST:
+    case clientConstants.FETCH_DEACTIVATE_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.FETCH_CATEGORY_SUCCESS:
+    case clientConstants.FETCH_DEACTIVATE_SUCCESS:
       state = {
         ...state,
         loading: false,
-        categories: action.payload,
+        deactivates: action.payload,
       };
       break;
-    case categoryConstants.FETCH_CATEGORY_FALIURE:
+    case clientConstants.FETCH_DEACTIVATE_FALIURE:
       state = {
         ...state,
         loading: false,
       };
       break;
-    case categoryConstants.CHANGE_STATUS_REQUEST:
+    case clientConstants.ACTIVATE_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.CHANGE_STATUS_SUCCESS:
-      state = {
-        ...state,
-        loading: false,
-        categories: state.categories.map((category) =>
-          category.categoryID === action.payload.categoryID
-            ? { ...category, categoryStatus: action.payload.categoryStatus }
-            : category
-        ),
-      };
-      break;
-
-    case categoryConstants.CHANGE_STATUS_FALIURE:
+    case clientConstants.ACTIVATE_SUCCESS:
       state = {
         ...state,
         loading: false,
       };
       break;
-    case categoryConstants.DELETE_CATEGORY_REQUEST:
+    case clientConstants.ACTIVATE_FALIURE:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+    case clientConstants.DEACTIVATE_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.DELETE_CATEGORY_SUCCESS:
+    case clientConstants.DEACTIVATE_SUCCESS:
       state = {
         ...state,
         loading: false,
       };
       break;
-
-    case categoryConstants.DELETE_CATEGORY_FALIURE:
+    case clientConstants.DEACTIVATE_FALIURE:
       state = {
         ...state,
         loading: false,
