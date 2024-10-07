@@ -210,4 +210,31 @@ public class MyOrderController : ControllerBase
         return Ok(new { message = "Order status updated successfully." });
     }
 
+    [HttpPut("Cancel/{orderId}")]
+    public IActionResult UpdateOrderCancellStatus(string orderId, [FromForm] string orderStatus)
+    {
+        // Step 1: Retrieve the order by orderId
+        var order = _myorderrepository.GetOrderById(orderId);
+        if (order == null)
+        {
+            return NotFound(new { message = "Order not found." });
+        }
+        if (order.OrderStatus != "dispatch")
+        {
+            order.OrderStatus = "Cancelled";
+
+            // Step 3: Save the updated order back to the repository
+            _myorderrepository.UpdateOrder(order);
+
+            // Return a success message
+            return Ok(new { message = "Order status updated successfully." });
+        }
+        else
+        {
+            return BadRequest(new { message = "Order is in dispatch status. Can not cancell" });
+        }
+        // Step 2: Update the order status
+
+    }
+
 }
