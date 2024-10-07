@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
 using BCrypt.Net;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 [ApiController]
@@ -86,12 +90,12 @@ public class ARoleController : ControllerBase
             return BadRequest(new { message = "Email or password is missing" });
         }
 
-        // Retrieve the vendor by email
+        // Retrieve the role by email
         var aRole = _arolerepository.GetARoleByEmail(ARoleEmail);
 
         if (aRole == null)
         {
-            return Unauthorized(new { message = "Invalid email or password" });
+            return Unauthorized(new { message = "Invalid email" });
         }
 
         // Verify the entered password with the stored hashed password
@@ -99,11 +103,45 @@ public class ARoleController : ControllerBase
 
         if (!isPasswordValid)
         {
-            return Unauthorized(new { message = "Invalid email or password" });
+            return Unauthorized(new { message = "Password Missmatching" });
         }
 
-        return Ok(aRole);
+        // Generate JWT token
+        var token = GenerateJwtToken(aRole);
+
+        // Return the JWT token and ARole information
+        return Ok(new { token, aRole });
     }
+
+    // Method to generate the JWT token
+    private string GenerateJwtToken(ARole aRole)
+    {
+        // Key to sign the token (You should store this key in configuration or environment variables)
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("fasfafffsf786sf7afsgfasf7atfafggy"));
+
+        // Create the claims for the token (you can add more claims as needed)
+        var claims = new[]
+        {
+        new Claim(ClaimTypes.Email, aRole.ARoleEmail),
+        new Claim(ClaimTypes.Role, aRole.ARoleTyoe) // Example claim, customize as needed
+    };
+
+        // Create the token descriptor
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddHours(1), // Token expiration time
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        // Generate the token
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        // Return the serialized token
+        return tokenHandler.WriteToken(token);
+    }
+
     [HttpGet("role/{role}")]
     public IActionResult GetARoleByRole(string role)
     {
