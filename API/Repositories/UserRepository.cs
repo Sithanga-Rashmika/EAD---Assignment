@@ -23,4 +23,9 @@ public class UserRepository
     {
         _context.Users.ReplaceOne(u => u.Email == user.Email, user);
     }
+    public List<User> GetUsersByStatus(string status)
+    {
+        return _context.Users.Find(user => user.IsActive == status).ToList();
+    }
+
 }

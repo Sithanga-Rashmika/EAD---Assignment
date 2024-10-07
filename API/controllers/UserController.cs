@@ -21,11 +21,22 @@ public class UserController : ControllerBase
             return BadRequest("User already exists.");
         }
 
-        user.IsActive = "Pending"; 
+        user.IsActive = "Pending";
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _userRepository.AddUser(user);
         return Ok("User registered successfully. Awaiting CSR activation.");
     }
+    [HttpGet("status/{status}")]
+    public IActionResult GetUsersByStatus(string status)
+    {
+        var users = _userRepository.GetUsersByStatus(status);
+        if (users == null || users.Count == 0)
+        {
+            return NotFound($"No users found with status '{status}'.");
+        }
+        return Ok(users);
+    }
+
 
     // Activate user account by CSR or Administrator
     [HttpPost("activate")]
