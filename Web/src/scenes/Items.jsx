@@ -1,3 +1,5 @@
+// inventory items.jsx File
+// IT21041716 Sandaruwan W.S.R
 import React, { useState, useEffect } from "react";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import Tooltip from "@mui/material/Tooltip";
@@ -21,7 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const Orders = () => {
+const Item = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.product.loading);
   const products = useSelector((state) => state.product.catProducts);
@@ -217,4 +219,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Item;

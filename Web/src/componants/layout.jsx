@@ -1,3 +1,5 @@
+// layout.jsx file 
+// IT21041716 Sandaruwan W.S.R
 import React from "react";
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";

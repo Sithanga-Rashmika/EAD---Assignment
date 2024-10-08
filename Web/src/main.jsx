@@ -1,3 +1,5 @@
+// main.js File
+// IT21041716 Sandaruwan W.S.R
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";

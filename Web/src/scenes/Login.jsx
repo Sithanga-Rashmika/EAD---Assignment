@@ -1,3 +1,5 @@
+// login.jsx File
+// IT21041716 Sandaruwan W.S.R
 import React, { useState, useEffect } from "react";
 import logo from "../assets/images/logo1.png";
 import { useSelector, useDispatch } from "react-redux";
@@ -72,10 +74,10 @@ const Login = () => {
                           Email
                         </label>
                         <input
-                          type="email"
+                          type="text"
                           className="form-control"
-                          id="exampleInputEmail1"
-                          aria-describedby="emailHelp"
+                          id="exampleInputtext1"
+                          aria-describedby="textHelp"
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}

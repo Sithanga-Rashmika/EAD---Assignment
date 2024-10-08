@@ -1,3 +1,5 @@
+// index reducer File
+// IT21041716 Sandaruwan W.S.R
 import { combineReducers } from "redux";
 import categoryReducer from "./categoryReducer";
 import productReducers from "./productReducers";

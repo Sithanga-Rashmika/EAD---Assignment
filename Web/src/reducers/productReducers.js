@@ -1,3 +1,5 @@
+// product reducer File
+// IT21041716 Sandaruwan W.S.R
 import { productConstants } from "../actions/constants";
 
 const initState = {

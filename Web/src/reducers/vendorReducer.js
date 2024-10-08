@@ -1,3 +1,5 @@
+// vendor reducer File
+// IT21041716 Sandaruwan W.S.R
 import { vendorConstants } from "../actions/constants";
 
 const initState = {
