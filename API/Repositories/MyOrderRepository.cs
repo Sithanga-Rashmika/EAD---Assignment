@@ -32,10 +32,7 @@ public class MyOrderRepository
             throw new Exception("Admin Role not found.");
         }
 
-        // Manually update the fields that need to be changed, ensuring _id remains the same
         exarole.OrderStatus = myOrder.OrderStatus;
-
-        // Replace the vendor while keeping the _id intact
         _context.Myorders.ReplaceOne(m => m.OrderID == myOrder.OrderID, exarole);
     }
 
@@ -43,11 +40,6 @@ public class MyOrderRepository
     {
         _context.Myorders.DeleteOne(m => m.OrderID == id);
     }
-
-    // public ARole GetARoleByEmail(string email)
-    // {
-    //     return _context.Aroles.Find(a => a.ARoleEmail == email).FirstOrDefault();
-    // }
 
     public void UpdateOrder(MyOrder order)
     {
@@ -59,7 +51,6 @@ public class MyOrderRepository
         return _context.Myorders.Find(order => order.OrderID == orderId).FirstOrDefault();
     }
 
-    //done by sithanga
     public IEnumerable<MyOrder> GetOrdersByStatus(string status)
     {
         // Retrieve only the orders that match the specified status
