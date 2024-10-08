@@ -93,7 +93,6 @@ public class CartController : ControllerBase
             return NotFound("Cart item not found.");
         }
 
-        // Delete the cart item using its ID
         _cartRepository.DeleteCart(cart.CartID);
         return Ok("Cart item deleted successfully.");
     }

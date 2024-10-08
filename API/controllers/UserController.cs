@@ -99,26 +99,6 @@ public class UserController : ControllerBase
     }
 
 
-    // Reactivate a deactivated account by CSR or Administrator
-    // [HttpPost("reactivate")]
-    // public IActionResult ReactivateUser([FromQuery] string email)
-    // {
-    //     var user = _userRepository.GetUserByEmail(email);
-    //     if (user == null)
-    //     {
-    //         return NotFound("User does not exist.");
-    //     }
-
-    //     if (!user.IsDeactivatedByCSR)
-    //     {
-    //         return BadRequest("Account was not deactivated by CSR.");
-    //     }
-
-    //     user.IsActive = true;
-    //     user.IsDeactivatedByCSR = false;
-    //     _userRepository.UpdateUser(user);
-    //     return Ok("User reactivated successfully.");
-    // }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] Dictionary<string, string> loginData)
