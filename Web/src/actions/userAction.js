@@ -75,7 +75,7 @@ export const signin = (form) => {
       }
     } catch (error) {
       if (error.response) {
-        if (response.response.status === 401) {
+        if (error.response.status === 401) {
           dispatch({ type: userConstants.LOGIN_FALIURE });
           toast.error("Invalid Credintial..!", { id: "t2" });
         } else {
@@ -179,6 +179,39 @@ export const register = (form) => {
         toast.error("Something went wrong..!", { id: "t2" });
       } else if (error.request) {
         dispatch({ type: userConstants.REGISTER_FALIURE });
+        toast.error("Server not respond..!", { id: "t3" });
+      }
+    }
+  };
+};
+
+export const retriveUsers = () => {
+  return async (dispatch) => {
+    dispatch({ type: userConstants.RETRIVE_USERS_REQUEST });
+
+    try {
+      const res = await axios.get("http://localhost:5154/api/arole/role/CSR");
+
+      if (res.status === 200) {
+        dispatch({
+          type: userConstants.RETRIVE_USERS_SUCCESS,
+          payload: res.data,
+        });
+      } else {
+        dispatch({ type: userConstants.RETRIVE_USERS_FALIURE });
+        toast.error("Something went wrong..!", { id: "t1" });
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          dispatch({ type: userConstants.RETRIVE_USERS_FALIURE });
+          toast.error("No data..!", { id: "t2" });
+        }else{
+          dispatch({ type: userConstants.RETRIVE_USERS_FALIURE });
+          toast.error("Something went wrong..!", { id: "t2" });
+        }
+      } else if (error.request) {
+        dispatch({ type: userConstants.RETRIVE_USERS_FALIURE });
         toast.error("Server not respond..!", { id: "t3" });
       }
     }

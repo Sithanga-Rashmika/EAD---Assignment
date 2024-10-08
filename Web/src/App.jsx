@@ -19,7 +19,7 @@ import Active from "./scenes/Active";
 import Reactive from "./scenes/Reactive";
 import Items from "./scenes/Items";
 import Profile from "./scenes/profile";
-
+import CSR from "./scenes/CSR";
 import AuthLayout from "./scenes/authLayout";
 
 function App() {
@@ -50,6 +50,7 @@ function App() {
             <Route path="/active" element={<Active />} />
             <Route path="/reactive" element={<Reactive />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/csr" element={<CSR />} />
             <Route path="/category/:type" element={<Items />} />
           </Route>
         </Route>

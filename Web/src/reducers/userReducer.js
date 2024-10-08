@@ -3,6 +3,7 @@ import { userConstants } from "../actions/constants";
 const initState = {
   user: {},
   oneUser: {},
+  csr: [],
   authenticated: false,
   loading: false,
 };
@@ -96,6 +97,25 @@ export default (state = initState, action) => {
       };
       break;
     case userConstants.REGISTER_FALIURE:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+    case userConstants.RETRIVE_USERS_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case userConstants.RETRIVE_USERS_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        csr: action.payload,
+      };
+      break;
+    case userConstants.RETRIVE_USERS_FALIURE:
       state = {
         ...state,
         loading: false,

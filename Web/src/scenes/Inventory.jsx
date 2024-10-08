@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import SettingsApplicationsRoundedIcon from "@mui/icons-material/SettingsApplicationsRounded";
-import { retriveProducts } from "../actions/productActions";
+import { retriveProducts,vendorProducts } from "../actions/productActions";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -11,7 +7,7 @@ const Inventory = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.product.loading);
   const products = useSelector((state) => state.product.products);
-
+  const user = useSelector((state) => state.user.user);
   useEffect(() => {
     document.title = "Inventory | BizCart";
   }, []);
@@ -27,8 +23,13 @@ const Inventory = () => {
   }, [loading]);
 
   useEffect(() => {
-    dispatch(retriveProducts());
-  }, [dispatch]);
+    if (user.aRoleTyoe === "Vendor") {
+      const id= user.aRoleID;
+      dispatch(vendorProducts(id));
+    } else {
+      dispatch(retriveProducts());
+    }
+  }, [dispatch, user]);
 
   // Grouping products by category and picking the first image per category, along with total quantity
   const categoryCounts = products.reduce((acc, product) => {

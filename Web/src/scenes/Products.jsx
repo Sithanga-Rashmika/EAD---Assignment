@@ -22,6 +22,7 @@ import {
   retriveProducts,
   DeleteProduct,
   updateProducts,
+  vendorProducts,
 } from "../actions/productActions";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
@@ -31,6 +32,7 @@ const Products = () => {
   const loading = useSelector((state) => state.product.loading);
   const categories = useSelector((state) => state.category.categories);
   const products = useSelector((state) => state.product.products);
+  const user = useSelector((state) => state.user.user);
   // Search state
   const [serQuary, setSerQuary] = useState("");
 
@@ -43,7 +45,7 @@ const Products = () => {
   const [image, setImage] = useState(null);
 
   //temp vendor id
-  const VendorID = "UID_12256";
+  const VendorID = user.aRoleID;
 
   useEffect(() => {
     if (loading === true) {
@@ -64,8 +66,13 @@ const Products = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(retriveProducts());
-  }, [dispatch]);
+    if (user.aRoleTyoe === "Vendor") {
+      const id= user.aRoleID;
+      dispatch(vendorProducts(id));
+    } else {
+      dispatch(retriveProducts());
+    }
+  }, [dispatch, user]);
 
   //add modal functions
   const [shmodal, setShmodal] = useState(false);
@@ -130,7 +137,11 @@ const Products = () => {
       form.append("Description", description);
       form.append("imageFile", image);
 
-      dispatch(createProducts(form));
+      if (user.aRoleTyoe === "Vendor") {
+        dispatch(createProducts(form));
+      } else {
+        toast.error("Only vendors are allowed to add new products!");
+      }
       closeModal();
     }
   };

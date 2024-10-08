@@ -9,7 +9,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.product.loading);
   const notifications = useSelector((state) => state.product.notifications);
-
+  const user = useSelector((state) => state.user.user);
   useEffect(() => {
     if (loading === true) {
       toast.loading("Loading...", {
@@ -20,7 +20,7 @@ const Navbar = () => {
     }
   }, [loading]);
 
-  const id = "UID_12256";
+  const id = user.aRoleID;
 
   useEffect(() => {
     dispatch(vendorNotification(id));

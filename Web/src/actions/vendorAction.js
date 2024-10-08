@@ -18,7 +18,8 @@ export const createVendor = (form) => {
           payload: res.data,
         });
 
-        toast.success("New Vendor Created..!", { id: "t5" });
+        toast.success("New User Created..!", { id: "t5" });
+        window.location.reload();
       } else {
         dispatch({ type: vendorConstants.CREATE_VENDOR_FALIURE });
         toast.error("Something went wrong..!", { id: "t1" });
@@ -71,7 +72,7 @@ export const DeleteVendor = (id) => {
       if (res.status === 204) {
         dispatch({ type: vendorConstants.DELETE_VENDOR_SUCCESS });
 
-        Swal.fire("Deleted!", "Vendor has been Removed.", "success").then(
+        Swal.fire("Deleted!", "User has been Removed.", "success").then(
           () => {
             window.location.reload();
           }

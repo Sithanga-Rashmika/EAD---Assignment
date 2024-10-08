@@ -59,4 +59,17 @@ public class MyOrderRepository
         return _context.Myorders.Find(order => order.OrderID == orderId).FirstOrDefault();
     }
 
+    //done by sithanga
+    public IEnumerable<MyOrder> GetOrdersByStatus(string status)
+    {
+        // Retrieve only the orders that match the specified status
+        return _context.Myorders.Find(order => order.OrderStatus == status).ToList();
+    }
+
+    public IEnumerable<MyOrder> GetOrdersByVendorId(string vendorId)
+    {
+        // Retrieve only the orders that match the specified vendor ID
+        return _context.Myorders.Find(order => order.VendorID == vendorId).ToList();
+    }
+
 }

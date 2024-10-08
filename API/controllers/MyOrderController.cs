@@ -237,4 +237,20 @@ public class MyOrderController : ControllerBase
 
     }
 
+
+    //done by sithanga
+    [HttpGet("Status/{status}")]
+    public ActionResult<IEnumerable<MyOrder>> GetAllOrdersBystatus([FromRoute] string status)
+    {
+        var ordersm = _myorderrepository.GetOrdersByStatus(status);
+        return Ok(ordersm);
+    }
+
+    [HttpGet("get/{vendorId}")]
+    public ActionResult<IEnumerable<MyOrder>> GetOrdersByVendorId([FromRoute] string vendorId)
+    {
+        var ordersByVendor = _myorderrepository.GetOrdersByVendorId(vendorId);
+        return Ok(ordersByVendor);
+    }
+
 }

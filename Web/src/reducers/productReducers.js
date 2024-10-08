@@ -139,6 +139,25 @@ export default (state = initState, action) => {
         loading: false,
       };
       break;
+    case productConstants.VENDOR_PRODUCT_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case productConstants.VENDOR_PRODUCT_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        products: action.payload,
+      };
+      break;
+    case productConstants.VENDOR_PRODUCT_FALIURE:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
   }
   return state;
 };

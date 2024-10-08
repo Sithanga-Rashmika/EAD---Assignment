@@ -16,17 +16,13 @@ import { TextField, MenuItem, InputBase, IconButton } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import {
-  createVendor,
-  retriveVendor,
-  DeleteVendor,
-} from "../actions/vendorAction";
+import { createVendor, DeleteVendor } from "../actions/vendorAction";
+import { retriveUsers } from "../actions/userAction";
 
-const Vendor = () => {
+const CSR = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.vendor.loading);
-  const vendors = useSelector((state) => state.vendor.vendors);
-
+  const csr = useSelector((state) => state.user.csr);
 
   const [serQuary, setSerQuary] = useState("");
   const [shmodal, setShmodal] = useState("");
@@ -50,7 +46,7 @@ const Vendor = () => {
   }, [loading]);
 
   useEffect(() => {
-    dispatch(retriveVendor());
+    dispatch(retriveUsers());
   }, [dispatch]);
 
   //add modal functions
@@ -101,7 +97,7 @@ const Vendor = () => {
         ARNumber: contact,
         ARoleEmail: email,
         ARolePasswrod: pwd,
-        ARoleTyoe: "Vendor",
+        ARoleTyoe: "CSR",
       };
       dispatch(createVendor(form));
       closeModal();
@@ -115,7 +111,7 @@ const Vendor = () => {
           <MDBModalDialog>
             <MDBModalContent>
               <MDBModalHeader>
-                <MDBModalTitle>Create New Vendor Account</MDBModalTitle>
+                <MDBModalTitle>Create New CSR Account</MDBModalTitle>
                 <MDBBtn
                   className="btn-close"
                   color="none"
@@ -190,19 +186,18 @@ const Vendor = () => {
     setSerQuary(event.target.value.toLowerCase());
   };
 
-  const filteredVendors = vendors.filter(
-    (vendor) =>
-      vendor.aRoleID.toLowerCase().includes(serQuary) ||
-      vendor.arName.toLowerCase().includes(serQuary) ||
-      vendor.arNumber.toLowerCase().includes(serQuary) ||
-      vendor.aRoleEmail.toLowerCase().includes(serQuary)
+  const filteredCsr = csr.filter(
+    (obj) =>
+      obj.aRoleID.toLowerCase().includes(serQuary) ||
+      obj.arName.toLowerCase().includes(serQuary) ||
+      obj.arNumber.toLowerCase().includes(serQuary) ||
+      obj.aRoleEmail.toLowerCase().includes(serQuary)
   );
 
   //delete vendor
   const deleteVendor = (id) => {
-    
     Swal.fire({
-      title: `Are you sure you want to delete this Vendor?`,
+      title: `Are you sure you want to delete this CSR?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#008000",
@@ -220,14 +215,17 @@ const Vendor = () => {
       <div className="container-fluid">
         <div className="card">
           <div className="card-body">
-            <h3 className="card-title fw-semibold">Vendors</h3>
+            <h3 className="card-title fw-semibold">
+              Customer Service Representatives
+            </h3>
             <p className="mb-0">
-              All the available vendors details display as below.
+              All the available Customer Service Representatives Accounts
+              details display as below.
             </p>
             <hr />
             <div className="head-section">
               <button className="btn btn-info m-1" onClick={showModal}>
-                Add New Vendor
+                Add New CSR
               </button>
               <div className="input-group" id="searchh">
                 <input
@@ -256,32 +254,42 @@ const Vendor = () => {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  {filteredVendors.map((data, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{data.aRoleID}</td>
-                      <td>{data.arName}</td>
-                      <td>{data.arNumber}</td>
-                      <td><a style={{cursor:"pointer"}}>{data.aRoleEmail}</a></td>
-                      <td
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Tooltip title="Delete Product">
-                          <DeleteForeverRoundedIcon
-                            style={{
-                              cursor: "pointer",
-                            }}
-                            onClick={() => deleteVendor(data.aRoleID)}
-                          />
-                        </Tooltip>
+                  {csr.length > 0 ? (
+                    filteredCsr.map((data, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{data.aRoleID}</td>
+                        <td>{data.arName}</td>
+                        <td>{data.arNumber}</td>
+                        <td>
+                          <a style={{ cursor: "pointer" }}>{data.aRoleEmail}</a>
+                        </td>
+                        <td
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Tooltip title="Delete CSR">
+                            <DeleteForeverRoundedIcon
+                              style={{
+                                cursor: "pointer",
+                              }}
+                              onClick={() => deleteVendor(data.aRoleID)}
+                            />
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" style={{ textAlign: "center" }}>
+                        No CSR accounts available.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </MDBTableBody>
               </MDBTable>
             </div>
@@ -293,4 +301,4 @@ const Vendor = () => {
   );
 };
 
-export default Vendor;
+export default CSR;
