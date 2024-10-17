@@ -1,3 +1,5 @@
+// navbar.jsx file 
+// IT21041716 Sandaruwan W.S.R
 import React, { useState, useEffect } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
@@ -125,10 +127,13 @@ const Navbar = () => {
                 </div>
               </li>
 
+              <h5 style={{ textTransform: "uppercase", fontWeight: "bold" }}>
+                {user.aRoleTyoe}
+              </h5>
+
               <li className="nav-item dropdown">
                 <a
                   className="nav-link nav-icon-hover"
-                  href="javascript:void(0)"
                   id="drop2"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"

@@ -1,3 +1,5 @@
+// constants  file 
+// IT21041716 Sandaruwan W.S.R
 export const categoryConstants = {
   CREATE_CATEGORY_REQUEST: "CREATE_CATEGORY_REQUEST",
   CREATE_CATEGORY_FALIURE: "CREATE_CATEGORY_FALIURE",

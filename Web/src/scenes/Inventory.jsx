@@ -1,3 +1,5 @@
+// inventory.jsx File
+// IT21041716 Sandaruwan W.S.R
 import React, { useState, useEffect } from "react";
 import { retriveProducts,vendorProducts } from "../actions/productActions";
 import { useSelector, useDispatch } from "react-redux";

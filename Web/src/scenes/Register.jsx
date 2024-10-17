@@ -1,3 +1,5 @@
+// register.jsx File
+// IT21041716 Sandaruwan W.S.R
 import React, { useState, useEffect } from "react";
 import logo from "../assets/images/logo1.png";
 import { useSelector, useDispatch } from "react-redux";
@@ -94,48 +96,48 @@ const Register = () => {
                       <img src={logo} width="180" alt="" />
                     </a>
                     <form onSubmit={handleSubmit}>
-                      <div classNameName="mb-3">
+                      <div className="mb-3">
                         <label
                           htmlFor="exampleInputtext1"
-                          classNameName="form-label"
+                          className="form-label"
                         >
                           Name
                         </label>
                         <input
                           type="text"
-                          classNameName="form-control"
+                          className="form-control"
                           id="exampleInputtext1"
                           aria-describedby="textHelp"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <div classNameName="mb-3">
+                      <div className="mb-3">
                         <label
                           htmlFor="exampleInputContact1"
-                          classNameName="form-label"
+                          className="form-label"
                         >
                           Contact Number
                         </label>
                         <input
                           type="text"
-                          classNameName="form-control"
+                          className="form-control"
                           id="exampleInputContact1"
                           aria-describedby="contactHelp"
                           value={contact}
                           onChange={(e) => setContact(e.target.value)}
                         />
                       </div>
-                      <div classNameName="mb-3">
+                      <div className="mb-3">
                         <label
                           htmlFor="exampleInputEmail1"
-                          classNameName="form-label"
+                          className="form-label"
                         >
                           Email Address
                         </label>
                         <input
                           type="email"
-                          classNameName="form-control"
+                          className="form-control"
                           id="exampleInputEmail1"
                           aria-describedby="emailHelp"
                           value={email}
@@ -143,16 +145,16 @@ const Register = () => {
                         />
                       </div>
 
-                      <div classNameName="mb-4">
+                      <div className="mb-4">
                         <label
                           htmlFor="exampleInputPassword1"
-                          classNameName="form-label"
+                          className="form-label"
                         >
                           Password
                         </label>
                         <input
                           type="password"
-                          classNameName="form-control"
+                          className="form-control"
                           id="exampleInputPassword1"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
@@ -160,15 +162,15 @@ const Register = () => {
                       </div>
                       <button
                         type="submit"
-                        classNameName="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2"
+                        className="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2"
                       >
                         Sign Up
                       </button>
-                      <div classNameName="d-flex align-items-center justify-content-center">
-                        <p classNameName="fs-4 mb-0 fw-bold">
+                      <div className="d-flex align-items-center justify-content-center">
+                        <p className="fs-4 mb-0 fw-bold">
                           Already have an Account?
                         </p>
-                        <a classNameName="text-primary fw-bold ms-2" href="/login">
+                        <a className="text-primary fw-bold ms-2" href="/login">
                           Sign In
                         </a>
                       </div>
