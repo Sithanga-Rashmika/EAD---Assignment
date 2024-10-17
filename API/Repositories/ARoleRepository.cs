@@ -59,7 +59,13 @@ public class ARoleRepository
     }
 
     public List<ARole> GetARolesByRole(string role)
-{
-    return _context.Aroles.Find(a => a.ARoleTyoe == role).ToList(); 
-}
+    {
+        return _context.Aroles.Find(a => a.ARoleTyoe == role).ToList();
+    }
+
+    public ARole GetVendorByEmail(string email)
+    {
+        return _context.Aroles.Find(a => a.ARoleEmail == email && a.ARoleTyoe == "Vendor").FirstOrDefault();
+    }
+
 }

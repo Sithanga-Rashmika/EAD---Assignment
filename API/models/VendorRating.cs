@@ -12,6 +12,9 @@ public class VendorRating
     [BsonElement("customer_id")]
     public string CustomerEmail { get; set; }
 
+    [BsonElement("product_id")]
+    public string ProductID { get; set; }
+
     [BsonElement("rating")]
     public int Rating { get; set; } // Rating from 1 to 5
 
