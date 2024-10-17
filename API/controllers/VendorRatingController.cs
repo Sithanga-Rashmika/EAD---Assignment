@@ -48,10 +48,10 @@ public class VendorRatingController : ControllerBase
         }
         rating.Date = DateTime.Now;
 
-        var vendor = _arolerepository.GetVendorByEmail(rating.VendorID);
+        var vendor = _arolerepository.GetVendorById(rating.VendorID);
         if (vendor == null)
         {
-            return NotFound(new { message = "Vendor with the given email not found." });
+            return NotFound(new { message = "Vendor with the given Id not found." });
         }
         var product = _productRepository.GetProductByID(rating.ProductID);
         if (product == null)
@@ -66,10 +66,10 @@ public class VendorRatingController : ControllerBase
     [HttpGet("summary/{vendorId}")]
     public IActionResult GetVendorRatingSummary(string vendorId)
     {
-        var vendor = _arolerepository.GetVendorByEmail(vendorId);
+        var vendor = _arolerepository.GetVendorById(vendorId);
         if (vendor == null)
         {
-            return NotFound(new { message = "Vendor with the given email not found." });
+            return NotFound(new { message = "Vendor with the given Id not found." });
         }
 
         var (averageRating, totalRatings, comments) = _vendorRatingRepository.GetRatingSummaryByVendorId(vendorId);
@@ -96,10 +96,10 @@ public class VendorRatingController : ControllerBase
     [HttpGet("summary/{vendorId}/{productId}")]
     public IActionResult GetVendorProductRatingSummary(string vendorId, string productId)
     {
-        var vendor = _arolerepository.GetVendorByEmail(vendorId);
+        var vendor = _arolerepository.GetVendorById(vendorId);
         if (vendor == null)
         {
-            return NotFound(new { message = "Vendor with the given email not found." });
+            return NotFound(new { message = "Vendor with the given Id not found." });
         }
 
         var product = _productRepository.GetProductByID(productId);
