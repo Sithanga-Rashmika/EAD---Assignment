@@ -24,4 +24,6 @@ public class Cart
     [BsonElement("date")]
     public DateTime Date { get; set; }
 
+    public string? ImageUrl { get; set; }
+
 }
