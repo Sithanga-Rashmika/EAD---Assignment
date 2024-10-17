@@ -132,6 +132,17 @@ public class UserController : ControllerBase
 
         // Login successful, return a success message or a token (e.g., JWT)
         return Ok("Login successful.");
+    }
 
+    [HttpGet("getUserDetails/{email}")]
+    public IActionResult GetUserByEmail(string email)
+    {
+        var user = _userRepository.GetUserByEmail(email);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found." });
+        }
+
+        return Ok(user);
     }
 }
