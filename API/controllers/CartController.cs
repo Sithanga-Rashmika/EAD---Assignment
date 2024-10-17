@@ -24,7 +24,8 @@ public class CartController : ControllerBase
     [FromForm] string? vendorID,
     [FromForm] string? productName,
     [FromForm] double? price,
-    [FromForm] string? status)
+    [FromForm] string? status,
+     [FromForm] string? ImageUrl)
     {
         var cart = new Cart
         {
@@ -36,7 +37,8 @@ public class CartController : ControllerBase
             ProductName = productName ?? "Unknown",
             Price = price ?? 0.0,
             Status = status ?? "Unknown",
-            Date = DateTime.Now
+            Date = DateTime.Now,
+            ImageUrl = ImageUrl
 
         };
         var product = _productRepository.GetProductByID(cart.ProductID);

@@ -36,4 +36,5 @@ public class MyOrder
     [BsonElement("date")]
     public DateTime OrderDate { get; set; }
     public string? ImageUrl { get; set; }
+
 }
