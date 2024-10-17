@@ -183,4 +183,26 @@ public class MyOrderController : ControllerBase
         return Ok(ordersByVendor);
     }
 
+    // GET: api/Order/{orderId}
+    [HttpGet("order/{orderId}")]
+    public ActionResult<MyOrder> GetOrderById(string orderId)
+    {
+        var order = _myorderrepository.GetOrderById(orderId);
+        if (order == null)
+        {
+            return NotFound(new { message = "Order not found." });
+        }
+        return Ok(order);
+    }
+    [HttpGet("order/user/{userId}")]
+    public ActionResult<List<MyOrder>> GetOrdersByUserId(string userId)
+    {
+        var orders = _myorderrepository.GetOrdersByUserId(userId);
+        if (orders == null || !orders.Any())
+        {
+            return NotFound(new { message = "No orders found for this user." });
+        }
+        return Ok(orders);
+    }
+
 }

@@ -62,5 +62,9 @@ public class MyOrderRepository
         // Retrieve only the orders that match the specified vendor ID
         return _context.Myorders.Find(order => order.VendorID == vendorId).ToList();
     }
+    public List<MyOrder> GetOrdersByUserId(string userId)
+    {
+        return _context.Myorders.Find(order => order.UserID == userId).ToList();
+    }
 
 }
