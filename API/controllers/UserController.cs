@@ -145,4 +145,52 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
+
+    [HttpPatch("update/{email}")]
+    public IActionResult UpdateUserDetails(string email, [FromBody] UpdateUserDto updatedUser)
+    {
+        var existingUser = _userRepository.GetUserByEmail(email);
+        if (existingUser == null)
+        {
+            return NotFound("User does not exist.");
+        }
+
+        // Only allow updates if the account is active
+        if (existingUser.IsActive != "Active")
+        {
+            return BadRequest("Account is inactive. Please contact CSR to activate it.");
+        }
+
+        // Update only fields that are provided (not null)
+        if (!string.IsNullOrEmpty(updatedUser.Password))
+        {
+            updatedUser.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
+            existingUser.Password = updatedUser.Password;
+        }
+        if (!string.IsNullOrEmpty(updatedUser.Contact))
+        {
+            existingUser.Contact = updatedUser.Contact;
+        }
+        if (!string.IsNullOrEmpty(updatedUser.Name))
+        {
+            existingUser.Name = updatedUser.Name;
+        }
+        if (!string.IsNullOrEmpty(updatedUser.Address))
+        {
+            existingUser.Address = updatedUser.Address;
+        }
+        if (!string.IsNullOrEmpty(updatedUser.Gender))
+        {
+            existingUser.Gender = updatedUser.Gender;
+        }
+        if (!string.IsNullOrEmpty(updatedUser.IsActive))
+        {
+            existingUser.IsActive = updatedUser.IsActive;
+        }
+
+        _userRepository.UpdateUser(existingUser);
+        return Ok("User details updated successfully.");
+    }
+
+
 }
