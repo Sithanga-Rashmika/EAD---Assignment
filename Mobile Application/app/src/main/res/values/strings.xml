@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">New_EAD</string>
+    <string name="product_image">Product Image</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="order">Order</string>
+    <string name="profile">Profile</string>
+    <string name="minus">Minus</string>
+    <string name="plus">Plus</string>
+</resources>
